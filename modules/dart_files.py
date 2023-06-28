@@ -274,6 +274,8 @@ class Band:
             resampling = Resampling.bilinear
         elif resample_method == "cubic":
             resampling = Resampling.cubic
+        else: 
+            resampling = Resampling.nearest
             
         with rasterio.open(self.getPath()+"/"+self.getFileName()) as dataset: 
             data = dataset.read(
