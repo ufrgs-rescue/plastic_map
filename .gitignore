@@ -1,1 +1,6 @@
 files/
+*.jpeg
+*.html
+*.pyc
+.ipynb_checkpoints/main-checkpoint.ipynb
+.ipynb_checkpoints/main-checkpoint.ipynb

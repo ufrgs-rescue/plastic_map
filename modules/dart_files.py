@@ -140,7 +140,7 @@ class Image:
         self.setYSize(self.getBandsSizes()[best_resolution][1])
         
         if best_resolution != worst_resolution:
-            print("As bandas da imagem ", self.getPath()," serão reamostradas para a melhor resolução disponível " + str(self.getBandsSizes()[best_resolution]))
+            print("The ", self.getPath()," image bands will be resampled to the best available spatial resolution " + str(self.getBandsSizes()[best_resolution]))
         
         files = dict()
         for file_name in self.getFileNames():
