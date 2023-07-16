@@ -4,6 +4,7 @@ import plotly.graph_objs as go
 import plotly.offline as py
 from plotly.subplots import make_subplots
 py.init_notebook_mode(connected=True)
+from modules import rsdata_charts
 from sklearn.cluster import KMeans
 from sklearn.metrics import accuracy_score, balanced_accuracy_score, confusion_matrix, f1_score, fbeta_score, jaccard_score, log_loss, precision_score, recall_score, roc_auc_score #ver se precisa tudo isso
 from sklearn.model_selection import train_test_split
@@ -17,6 +18,56 @@ def k_means(dataset, features, k, random_state):
     dataset['Cluster'] = clf.labels_
     
     return dataset
+
+def map_kmeans(date, ground_truth, classified_data, path):
+    mapa = []
+    color = []
+    data = ground_truth.query("Path == '"+date+"'")
+
+    #Ground truth spacial info
+    for i in range(len(set(list(data['Line']))) - 1):
+        map_line = []
+        color_line = []
+        data_line = data.loc[data['Line'] == i]
+        for j in range(len(set(list(data['Column']))) - 1):
+            cell = data_line.loc[data_line['Column'] == j]['Label'].values
+            if len(cell) > 0:
+                map_line.append(cell[0])
+                if cell[0] == 'Sand' or cell[0] == 'Coast':
+                    color_line.append(-20)
+                if cell[0] == 'Water':
+                    color_line.append(-10)
+                elif cell[0] == 'Plastic':
+                    color_line.append(10)
+                elif cell[0] == 'Wood':
+                    color_line.append(20)
+            else:
+                map_line.append("XXXXXX")
+                color_line.append(0)
+
+        mapa.append(map_line)
+        color.append(color_line)
+    
+    #for i in range(len(set(list(data['Line']))) - 1):
+    #    print(mapa[i]) #essa é a verdade de campo da data
+
+    export_name = path+date+'_groundtruth'
+    
+    with open(export_name+".html", 'a', encoding='utf-8') as f:
+        fig = go.Figure(data=go.Heatmap(
+                    z=color,
+                    text=mapa,
+                    texttemplate="%{text}",
+                    textfont={"size":15}))
+
+        fig.write_image(export_name+".jpeg")
+                    
+        f.write(fig.to_html())
+    
+    #Classification spacial info
+    return data
+
+
 
 def multilayer_perceptron(X, y, X_real, y_real, n_epochs):   
     assessment = dict()
