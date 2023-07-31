@@ -19,12 +19,13 @@ def k_means(dataset, features, k, random_state):
     
     return dataset
 
-def map_kmeans(date, ground_truth, classified_data, path):
+def map_kmeans(date, ground_truth, classified_data, path, caminho):
+    #Ground truth spacial info
+    #English
     mapa = []
     color = []
     data = ground_truth.query("Path == '"+date+"'")
-
-    #Ground truth spacial info
+    
     for i in range(len(set(list(data['Line']))) - 1):
         map_line = []
         color_line = []
@@ -47,26 +48,163 @@ def map_kmeans(date, ground_truth, classified_data, path):
 
         mapa.append(map_line)
         color.append(color_line)
-    
-    #for i in range(len(set(list(data['Line']))) - 1):
-    #    print(mapa[i]) #essa é a verdade de campo da data
 
-    export_name = path+date+'_groundtruth'
+    dat = date.replace('/','_')
+    export_name = path+dat+'groundtruth'
+    print(export_name)
     
     with open(export_name+".html", 'a', encoding='utf-8') as f:
         fig = go.Figure(data=go.Heatmap(
                     z=color,
                     text=mapa,
                     texttemplate="%{text}",
-                    textfont={"size":15}))
+                    textfont={"size":14}))
 
+        fig.update_layout(height=1000, width=900)
         fig.write_image(export_name+".jpeg")
                     
         f.write(fig.to_html())
     
-    #Classification spacial info
-    return data
+    #Portuguese
+    mapa = []
+    color = []
+    data = ground_truth.query("Path == '"+date+"'")
+    
+    for i in range(len(set(list(data['Line']))) - 1):
+        map_line = []
+        color_line = []
+        data_line = data.loc[data['Line'] == i]
+        for j in range(len(set(list(data['Column']))) - 1):
+            cell = data_line.loc[data_line['Column'] == j]['Classe'].values
+            if len(cell) > 0:
+                map_line.append(cell[0])
+                if cell[0] == 'Areia' or cell[0] == 'Costa':
+                    color_line.append(-20)
+                if cell[0] == 'Água':
+                    color_line.append(-10)
+                elif cell[0] == 'Plástico':
+                    color_line.append(10)
+                elif cell[0] == 'Madeira':
+                    color_line.append(20)
+            else:
+                map_line.append("XXXXXX")
+                color_line.append(0)
 
+        mapa.append(map_line)
+        color.append(color_line)
+
+    dat = date.replace('/','_')
+    export_name = path+dat+'verdadecampo'
+    print(export_name)
+    
+    with open(export_name+".html", 'a', encoding='utf-8') as f:
+        fig = go.Figure(data=go.Heatmap(
+                    z=color,
+                    text=mapa,
+                    texttemplate="%{text}",
+                    textfont={"size":14}))
+
+        fig.update_layout(height=1000, width=900)
+        fig.write_image(export_name+".jpeg")
+                    
+        f.write(fig.to_html())
+    
+    
+    #---------------------------
+    #Classification spacial info
+    #English
+    mapa = []
+    color = []
+    data = classified_data.query("Path == '"+date+"'")
+
+    #Ground truth spacial info
+    for i in range(len(set(list(data['Line']))) - 1):
+        map_line = []
+        color_line = []
+        data_line = data.loc[data['Line'] == i]
+        for j in range(len(set(list(data['Column']))) - 1):
+            cell = data_line.loc[data_line['Column'] == j]['Cluster'].values
+            if len(cell) > 0:
+                map_line.append(cell[0])
+                if cell[0] == 0:
+                    color_line.append(-20)
+                if cell[0] == 1:
+                    color_line.append(-10)
+                elif cell[0] == 2:
+                    color_line.append(0)
+                elif cell[0] == 3:
+                    color_line.append(10)
+                elif cell[0] == 4:
+                    color_line.append(20)
+            else:
+                map_line.append("XXXXXX")
+                color_line.append(0)
+
+        mapa.append(map_line)
+        color.append(color_line)
+
+    dat = date.replace('/','_')
+    export_name = path+dat+'classified'
+    print(export_name)
+    
+    with open(export_name+".html", 'a', encoding='utf-8') as f:
+        fig = go.Figure(data=go.Heatmap(
+                    z=color,
+                    text=mapa,
+                    texttemplate="%{text}",
+                    textfont={"size":14}))
+        
+        fig.update_layout(height=1000, width=900)
+        fig.write_image(export_name+".jpeg")
+                    
+        f.write(fig.to_html())
+
+    #Portuguese
+    mapa = []
+    color = []
+    data = classified_data.query("Path == '"+date+"'")
+
+    #Ground truth spacial info
+    for i in range(len(set(list(data['Line']))) - 1):
+        map_line = []
+        color_line = []
+        data_line = data.loc[data['Line'] == i]
+        for j in range(len(set(list(data['Column']))) - 1):
+            cell = data_line.loc[data_line['Column'] == j]['Cluster'].values
+            if len(cell) > 0:
+                map_line.append(cell[0])
+                if cell[0] == 0:
+                    color_line.append(-20)
+                if cell[0] == 1:
+                    color_line.append(-10)
+                elif cell[0] == 2:
+                    color_line.append(0)
+                elif cell[0] == 3:
+                    color_line.append(10)
+                elif cell[0] == 4:
+                    color_line.append(20)
+            else:
+                map_line.append("XXXXXX")
+                color_line.append(0)
+
+        mapa.append(map_line)
+        color.append(color_line)
+
+    dat = date.replace('/','_')
+    export_name = path+dat+'classificado'
+    print(export_name)
+    
+    with open(export_name+".html", 'a', encoding='utf-8') as f:
+        fig = go.Figure(data=go.Heatmap(
+                    z=color,
+                    text=mapa,
+                    texttemplate="%{text}",
+                    textfont={"size":14}))
+
+        fig.update_layout(height=1000, width=900)
+        fig.write_image(export_name+".jpeg")
+                    
+        f.write(fig.to_html())
 
 
 def multilayer_perceptron(X, y, X_real, y_real, n_epochs):   
