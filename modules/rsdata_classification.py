@@ -19,7 +19,7 @@ def k_means(dataset, features, k, random_state):
     
     return dataset
 
-def map_kmeans(date, ground_truth, classified_data, path, caminho):
+def map_kmeans(date, ground_truth, classified_data, path, caminho, height, width):
     #Ground truth spacial info
     #English
     mapa = []
@@ -51,16 +51,15 @@ def map_kmeans(date, ground_truth, classified_data, path, caminho):
 
     dat = date.replace('/','_')
     export_name = path+dat+'groundtruth'
-    print(export_name)
     
     with open(export_name+".html", 'a', encoding='utf-8') as f:
         fig = go.Figure(data=go.Heatmap(
                     z=color,
                     text=mapa,
                     texttemplate="%{text}",
-                    textfont={"size":14}))
+                    textfont={"size":11}))
 
-        fig.update_layout(height=1000, width=900)
+        fig.update_layout(height=height, width=width)
         fig.write_image(export_name+".jpeg")
                     
         f.write(fig.to_html())
@@ -95,16 +94,15 @@ def map_kmeans(date, ground_truth, classified_data, path, caminho):
 
     dat = date.replace('/','_')
     export_name = path+dat+'verdadecampo'
-    print(export_name)
     
     with open(export_name+".html", 'a', encoding='utf-8') as f:
         fig = go.Figure(data=go.Heatmap(
                     z=color,
                     text=mapa,
                     texttemplate="%{text}",
-                    textfont={"size":14}))
+                    textfont={"size":11}))
 
-        fig.update_layout(height=1000, width=900)
+        fig.update_layout(height=height, width=width)
         fig.write_image(export_name+".jpeg")
                     
         f.write(fig.to_html())
@@ -145,16 +143,15 @@ def map_kmeans(date, ground_truth, classified_data, path, caminho):
 
     dat = date.replace('/','_')
     export_name = path+dat+'classified'
-    print(export_name)
     
     with open(export_name+".html", 'a', encoding='utf-8') as f:
         fig = go.Figure(data=go.Heatmap(
                     z=color,
                     text=mapa,
                     texttemplate="%{text}",
-                    textfont={"size":14}))
+                    textfont={"size":11}))
         
-        fig.update_layout(height=1000, width=900)
+        fig.update_layout(height=height, width=width)
         fig.write_image(export_name+".jpeg")
                     
         f.write(fig.to_html())
@@ -192,16 +189,15 @@ def map_kmeans(date, ground_truth, classified_data, path, caminho):
 
     dat = date.replace('/','_')
     export_name = path+dat+'classificado'
-    print(export_name)
     
     with open(export_name+".html", 'a', encoding='utf-8') as f:
         fig = go.Figure(data=go.Heatmap(
                     z=color,
                     text=mapa,
                     texttemplate="%{text}",
-                    textfont={"size":14}))
+                    textfont={"size":11}))
 
-        fig.update_layout(height=1000, width=900)
+        fig.update_layout(height=height, width=width)
         fig.write_image(export_name+".jpeg")
                     
         f.write(fig.to_html())
