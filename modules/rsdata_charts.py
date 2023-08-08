@@ -639,3 +639,182 @@ def stackedbars_chart(datasets_names, traces, bands, n_bins, labels, labels_grou
     else:
         print("Parameters provided for datasets have different sizes")
         
+def map_nn(date, ground_truth, classified_data, path, caminho, height, width): #caminho, 
+    #Ground truth spacial info
+    #English
+    mapa = []
+    color = []
+    data = ground_truth.query("Path == '"+date+"'")
+    
+    for i in range(len(set(list(data['Line']))) - 1):
+        map_line = []
+        color_line = []
+        data_line = data.loc[data['Line'] == i]
+        for j in range(len(set(list(data['Column']))) - 1):
+            cell = data_line.loc[data_line['Column'] == j]['Label'].values
+            if len(cell) > 0:
+                map_line.append(cell[0])
+                #if cell[0] == 'Sand' or cell[0] == 'Coast':
+                #    color_line.append(-20)
+                if cell[0] == 'Water':
+                    color_line.append(-10)
+                elif cell[0] == 'Plastic':
+                    color_line.append(10)
+                #elif cell[0] == 'Wood':
+                #    color_line.append(20)
+            else:
+                map_line.append("XXXXXX")
+                color_line.append(0)
+
+        mapa.append(map_line)
+        color.append(color_line)
+
+    dat = date.replace('/','_')
+    export_name = path+dat+'_groundtruth'
+    
+    with open(export_name+".html", 'a', encoding='utf-8') as f:
+        fig = go.Figure(data=go.Heatmap(
+                    z=color,
+                    text=mapa,
+                    texttemplate="%{text}",
+                    textfont={"size":11}))
+
+        fig.update_layout(height=height, width=width)
+        fig.write_image(export_name+".jpeg")
+                    
+        f.write(fig.to_html())
+    
+    #Portuguese
+    mapa = []
+    color = []
+    data = ground_truth.query("Path == '"+date+"'")
+    
+    for i in range(len(set(list(data['Line']))) - 1):
+        map_line = []
+        color_line = []
+        data_line = data.loc[data['Line'] == i]
+        for j in range(len(set(list(data['Column']))) - 1):
+            cell = data_line.loc[data_line['Column'] == j]['Classe'].values
+            if len(cell) > 0:
+                map_line.append(cell[0])
+                #if cell[0] == 'Areia' or cell[0] == 'Costa':
+                #    color_line.append(-20)
+                if cell[0] == 'Água':
+                    color_line.append(-10)
+                elif cell[0] == 'Plástico':
+                    color_line.append(10)
+                #elif cell[0] == 'Madeira':
+                #    color_line.append(20)
+            else:
+                map_line.append("XXXXXX")
+                color_line.append(0)
+
+        mapa.append(map_line)
+        color.append(color_line)
+
+    dat = date.replace('/','_')
+    export_name = caminho+dat+'_verdadecampo'
+    
+    with open(export_name+".html", 'a', encoding='utf-8') as f:
+        fig = go.Figure(data=go.Heatmap(
+                    z=color,
+                    text=mapa,
+                    texttemplate="%{text}",
+                    textfont={"size":11}))
+
+        fig.update_layout(height=height, width=width)
+        fig.write_image(export_name+".jpeg")
+                    
+        f.write(fig.to_html())
+        
+
+    '''
+    #---------------------------
+    #Classification spacial info
+    #English
+    mapa = []
+    color = []
+    data = classified_data.query("Path == '"+date+"'")
+
+    for i in range(len(set(list(data['Line']))) - 1):
+        map_line = []
+        color_line = []
+        data_line = data.loc[data['Line'] == i]
+        for j in range(len(set(list(data['Column']))) - 1):
+            cell = data_line.loc[data_line['Column'] == j]['Cluster'].values
+            if len(cell) > 0:
+                map_line.append(cell[0])
+                #if cell[0] == 'Sand' or cell[0] == 'Coast':
+                #    color_line.append(-20)
+                if cell[0] == 'Water':
+                    color_line.append(-10)
+                elif cell[0] == 'Plastic':
+                    color_line.append(10)
+                #elif cell[0] == 'Wood':
+                #    color_line.append(20)
+            else:
+                map_line.append("XXXXXX")
+                color_line.append(0)
+
+        mapa.append(map_line)
+        color.append(color_line)
+
+    dat = date.replace('/','_')
+    export_name = path+dat+'_classified'
+    
+    with open(export_name+".html", 'a', encoding='utf-8') as f:
+        fig = go.Figure(data=go.Heatmap(
+                    z=color,
+                    text=mapa,
+                    texttemplate="%{text}",
+                    textfont={"size":11}))
+        
+        fig.update_layout(height=height, width=width)
+        fig.write_image(export_name+".jpeg")
+                    
+        f.write(fig.to_html())
+
+    #Portuguese
+    mapa = []
+    color = []
+    data = classified_data.query("Path == '"+date+"'")
+
+    for i in range(len(set(list(data['Line']))) - 1):
+        map_line = []
+        color_line = []
+        data_line = data.loc[data['Line'] == i]
+        for j in range(len(set(list(data['Column']))) - 1):
+            cell = data_line.loc[data_line['Column'] == j]['Cluster'].values
+            if len(cell) > 0:
+                map_line.append(cell[0])
+                #if cell[0] == 'Areia' or cell[0] == 'Costa':
+                #    color_line.append(-20)
+                if cell[0] == 'Água':
+                    color_line.append(-10)
+                elif cell[0] == 'Plástico':
+                    color_line.append(10)
+                #elif cell[0] == 'Madeira':
+                #    color_line.append(20)
+            else:
+                map_line.append("XXXXXX")
+                color_line.append(0)
+
+        mapa.append(map_line)
+        color.append(color_line)
+
+    dat = date.replace('/','_')
+    export_name = caminho+dat+'_classificado'
+    
+    with open(export_name+".html", 'a', encoding='utf-8') as f:
+        fig = go.Figure(data=go.Heatmap(
+                    z=color,
+                    text=mapa,
+                    texttemplate="%{text}",
+                    textfont={"size":11}))
+
+        fig.update_layout(height=height, width=width)
+        fig.write_image(export_name+".jpeg")
+                    
+        f.write(fig.to_html())
+    
+    '''

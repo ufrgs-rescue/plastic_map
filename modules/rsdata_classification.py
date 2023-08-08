@@ -93,7 +93,7 @@ def map_kmeans(date, ground_truth, classified_data, path, caminho, height, width
         color.append(color_line)
 
     dat = date.replace('/','_')
-    export_name = path+dat+'verdadecampo'
+    export_name = caminho+dat+'verdadecampo'
     
     with open(export_name+".html", 'a', encoding='utf-8') as f:
         fig = go.Figure(data=go.Heatmap(
@@ -115,7 +115,6 @@ def map_kmeans(date, ground_truth, classified_data, path, caminho, height, width
     color = []
     data = classified_data.query("Path == '"+date+"'")
 
-    #Ground truth spacial info
     for i in range(len(set(list(data['Line']))) - 1):
         map_line = []
         color_line = []
@@ -161,7 +160,6 @@ def map_kmeans(date, ground_truth, classified_data, path, caminho, height, width
     color = []
     data = classified_data.query("Path == '"+date+"'")
 
-    #Ground truth spacial info
     for i in range(len(set(list(data['Line']))) - 1):
         map_line = []
         color_line = []
@@ -188,7 +186,7 @@ def map_kmeans(date, ground_truth, classified_data, path, caminho, height, width
         color.append(color_line)
 
     dat = date.replace('/','_')
-    export_name = path+dat+'classificado'
+    export_name = caminho+dat+'classificado'
     
     with open(export_name+".html", 'a', encoding='utf-8') as f:
         fig = go.Figure(data=go.Heatmap(
