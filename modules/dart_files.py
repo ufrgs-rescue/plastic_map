@@ -16,17 +16,34 @@ def open_folders(path):
     else:
         path = path+"/"
 
-    polymers = os.listdir(path)
-    cover_percent = dict()
+    polymers = dict()
+    polymers_list = os.listdir(path)
     os.chdir(path)
     
-    for polymer in polymers:
+    for polymer in polymers_list:
         os.chdir(polymer)
-        percents = os.listdir()
-        cover_percent[polymer] = percents
+        submergences_list = os.listdir()
+        submergences = dict()
+        for submergence in submergences_list:
+            os.chdir(submergence)
+            colors_list = os.listdir()
+            colors = dict()
+            for color in colors_list:
+                os.chdir(color)
+                status_list = os.listdir()
+                status = dict()
+                for stat in status_list:
+                    os.chdir(stat)
+                    status[stat] = os.listdir()
+                    os.chdir('../')
+                colors[color] = status
+                os.chdir('../')
+            submergences[submergence] = colors
+            os.chdir('../')
+        polymers[polymer] = submergences
         os.chdir('../')
-        
-    return path, polymers, cover_percent
+  
+    return path, polymers
 
 
 def get_images(path, polymers, cover_percent, resample_method):
