@@ -46,27 +46,31 @@ def open_folders(path):
     return path, polymers
 
 
-def get_images(path, polymers, cover_percent, resample_method):
+def get_images(paths, resample_method):
     imagery = []
-    for polymer in polymers:
-        for cover in cover_percent:
-            if cover == polymer:
-                percents = cover_percent.get(cover)
-                for percent in percents:
-                    #directory = path+polymer+"/"+percent+"/"
-                    directory = polymer+"/"+percent+"/"
-                    #print(os.listdir())
-                    files_list = os.listdir(directory) 
-                    if files_list:
-                        bands = []
-                        for dart_file in files_list:
-                            info = str(dart_file).split(sep="_")                         
-                            if info[1] not in bands:
-                                bands.append(info[1]) 
-                        percent = str(info[2]).split(sep=".")[0] 
-                        #info[2] corresponde ao percentual de cobertura informado no nome do último arquivo - pressupõe-se que todos dentro da pasta tem o mesmo percentual de cobertura (pode ser necessário verificar)
-                        current_image = Image(directory, files_list, percent, bands, resample_method)   #AQUI - DAR OPCAO DE REAMOSTRAGEM
-                        imagery.append(current_image)               
+    for path in paths.keys():
+        polymers = paths[path]
+        for polymer in polymers.keys():
+            submergences = polymers[polymer]
+            for submergence in submergences.keys():
+                colors = submergences[submergence]
+                for color in colors.keys():
+                    status = colors[color]
+                    for stat in status.keys():
+                        cover_percents = status[stat]
+                        for percent in cover_percents:
+                            directory = path+polymer+"/"+submergence+"/"+color+"/"+stat+"/"+percent+"/"
+                            files_list = os.listdir(directory) 
+                            if files_list:
+                                bands = []
+                                for dart_file in files_list:
+                                    info = str(dart_file).split(sep="_")  
+                                    i = len(info)-2
+                                    if info[i] not in bands:
+                                        bands.append(info[i])
+                                print(bands)
+                            current_image = Image(directory, files_list, percent, bands, resample_method)   
+                            imagery.append(current_image)
     return imagery
 
 
@@ -137,7 +141,8 @@ class Image:
     def setBandsSizes(self):
         self.bands_sizes = dict()
         for file_name in self.getFileNames():
-            current_band = str(file_name).split(sep="_")[1]
+            i = len(str(file_name).split(sep="_")) - 2
+            current_band = str(file_name).split(sep="_")[i]
             data = open(self.getPath()+"/"+file_name)
             data = [x.split() for x in data]
             data = data[6:]
@@ -155,9 +160,11 @@ class Image:
         #É necessário garantir que as imagens sejam "quadradas" (120x120, 30x30, 60x60, etc) - caso contrário cálculo não funciona
         self.setXSize(self.getBandsSizes()[best_resolution][0])
         self.setYSize(self.getBandsSizes()[best_resolution][1])
+        print("Resolutions X e Y", self.getXSize(), self.getYSize())
         
         if best_resolution != worst_resolution:
             print("The ", self.getPath()," image bands will be resampled to the best available spatial resolution " + str(self.getBandsSizes()[best_resolution]))
+            
         
         files = dict()
         for file_name in self.getFileNames():
@@ -169,11 +176,21 @@ class Image:
                 files.update({current_file.getBandName(): current_file.getData()})
             else:
                 break        
-
+        #print(" ")
+        #print("Path: ", self.getPath())
+        #print(" ")
+        #print("Len files: ", len(files))
+        #print(" ")
+        #print("Len get filenames: ", self.getFileNames())
+        #print(" ")
+        #print("---")
+        
         if len(files) == len(self.getFileNames()):
             self.pixels = self.mountMultiband(files)
         else:
-            print("Erro na leitura das bandas - não é possível concluir o processo")    
+            print("Erro na leitura das bandas - não é possível concluir o processo")   
+            
+            #print(self.getPath(), self.getFileNames(), self.getResampleMethod(), self.getBands(), self.getPlasticCoverPercent())
 
     def mountMultiband(self, files):
         pixels = []
