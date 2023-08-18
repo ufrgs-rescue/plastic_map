@@ -46,7 +46,7 @@ def open_folders(path):
     return path, polymers
 
 
-def get_images(paths, resample_method):
+def get_images(paths, resample_method, scaling_mode):
     imagery = []
     for path in paths.keys():
         polymers = paths[path]
@@ -68,8 +68,7 @@ def get_images(paths, resample_method):
                                     i = len(info)-2
                                     if info[i] not in bands:
                                         bands.append(info[i])
-                                print(bands)
-                            current_image = Image(directory, files_list, percent, bands, resample_method)   
+                            current_image = Image(directory, files_list, percent, bands, resample_method, scaling_mode)   
                             imagery.append(current_image)
     return imagery
 
@@ -113,10 +112,11 @@ def build_dataset(image_collection):
 
 
 class Image:
-    def __init__(self, path, file_names, percent, bands, resample_method):
+    def __init__(self, path, file_names, percent, bands, resample_method, scaling_mode):
         self.setPath(path)
         self.setFileNames(file_names)
         self.setResampleMethod(resample_method)
+        self.setScalingMode(scaling_mode)
         self.setBands(bands)
         self.setPlasticCoverPercent(percent)
         self.initLabelsMap()
@@ -130,6 +130,12 @@ class Image:
     
     def setResampleMethod(self, resample_method):
         self.resample_method = resample_method
+        
+    def setScalingMode(self, scaling_mode):
+        if scaling_mode == "up" or scaling_mode == "down": 
+            self.scaling_mode = scaling_mode
+        else:
+            print("Error: Scale mode must be equal to 'up' or 'down', otherwise it will not be possible to resample bands")
         
     def setPlasticCoverPercent(self, percent):
         self.plastic_cover_percent = percent
@@ -146,6 +152,7 @@ class Image:
             data = open(self.getPath()+"/"+file_name)
             data = [x.split() for x in data]
             data = data[6:]
+            
             self.bands_sizes.update({current_band: (len(data), len(data[0]))})
             
     def setXSize(self, x_size):
@@ -157,40 +164,56 @@ class Image:
     def setPixels(self):
         best_resolution = max(self.getBandsSizes(), key = self.getBandsSizes().get)
         worst_resolution = min(self.getBandsSizes(), key = self.getBandsSizes().get)
-        #É necessário garantir que as imagens sejam "quadradas" (120x120, 30x30, 60x60, etc) - caso contrário cálculo não funciona
         self.setXSize(self.getBandsSizes()[best_resolution][0])
         self.setYSize(self.getBandsSizes()[best_resolution][1])
-        print("Resolutions X e Y", self.getXSize(), self.getYSize())
         
         if best_resolution != worst_resolution:
-            print("The ", self.getPath()," image bands will be resampled to the best available spatial resolution " + str(self.getBandsSizes()[best_resolution]))
+            if self.getScalingMode() == 'up':
+                print("The ", self.getPath()," image bands will be resampled to the higher available spatial resolution " + str(self.getBandsSizes()[best_resolution]))
+            elif self.getScalingMode() == 'down':
+                print("The ", self.getPath()," image bands will be resampled to the lower available spatial resolution " + str(self.getBandsSizes()[worst_resolution]))
+        else:
+            print("All bands have the same resolution. There is no need to resample.")
             
         
         files = dict()
         for file_name in self.getFileNames():
             current_file = Band(self.getPath(), file_name)
-            upscale_factor = int(self.getBandsSizes()[best_resolution][0] / current_file.getResolution()[0])
-            if upscale_factor > 1:
-                files.update({current_file.getBandName(): current_file.resample(upscale_factor, self.getResampleMethod())})
-            elif upscale_factor == 1:
-                files.update({current_file.getBandName(): current_file.getData()})
-            else:
-                break        
-        #print(" ")
-        #print("Path: ", self.getPath())
-        #print(" ")
-        #print("Len files: ", len(files))
-        #print(" ")
-        #print("Len get filenames: ", self.getFileNames())
-        #print(" ")
-        #print("---")
+            if self.getScalingMode() == "up":
+                scale_factor_x = self.getBandsSizes()[best_resolution][0] / current_file.getResolution()[0]
+                scale_factor_y = self.getBandsSizes()[best_resolution][1] / current_file.getResolution()[1]
+                if scale_factor_x == scale_factor_y:
+                    if scale_factor_x > 1:
+                        files.update({current_file.getBandName(): current_file.resample(scale_factor_x, self.getResampleMethod())})
+                    elif scale_factor_x == 1:
+                        files.update({current_file.getBandName(): current_file.getData()})
+                    else:
+                        break
+                else: 
+                    print("Unable to resample because scale factor is different for x and y axes")
+                    break
+            elif self.getScalingMode() == "down":
+                scale_factor_x = self.getBandsSizes()[worst_resolution][0] / current_file.getResolution()[0]
+                scale_factor_y = self.getBandsSizes()[worst_resolution][1] / current_file.getResolution()[1]
+                
+                if scale_factor_x == scale_factor_y:
+                    if scale_factor_x < 1:
+                        files.update({current_file.getBandName(): current_file.resample(scale_factor_x, self.getResampleMethod())})
+                    elif scale_factor_x == 1:
+                        files.update({current_file.getBandName(): current_file.getData()})
+                    else:
+                        break
+                else: 
+                    print("Unable to resample because scale factor is different for x and y axes")
+                    break
+                
+
         
         if len(files) == len(self.getFileNames()):
             self.pixels = self.mountMultiband(files)
         else:
-            print("Erro na leitura das bandas - não é possível concluir o processo")   
+            print("Error reading bands - unable to complete process")   
             
-            #print(self.getPath(), self.getFileNames(), self.getResampleMethod(), self.getBands(), self.getPlasticCoverPercent())
 
     def mountMultiband(self, files):
         pixels = []
@@ -244,6 +267,9 @@ class Image:
     def getResampleMethod(self):
         return self.resample_method
     
+    def getScalingMode(self):
+        return self.scaling_mode
+    
     def getPlasticCoverPercent(self):
         return self.plastic_cover_percent
     
@@ -278,7 +304,8 @@ class Band:
         self.file_name = file_name
     
     def setBandName(self):
-        self.band_name = str(self.getFileName()).split(sep="_")[1]                       
+        i = len(str(self.getFileName()).split(sep="_")) - 2
+        self.band_name = str(self.getFileName()).split(sep="_")[i]                       
         
     def setData(self):
         data = open(self.getPath()+"/"+self.getFileName())
@@ -303,7 +330,7 @@ class Band:
     def getResolution(self):
         return self.resolution
 
-    def resample(self, upscale_factor, resample_method):
+    def resample(self, scale_factor, resample_method):
         if resample_method == "bilinear":
             resampling = Resampling.bilinear
         elif resample_method == "cubic":
@@ -315,8 +342,8 @@ class Band:
             data = dataset.read(
                 out_shape=(
                 dataset.count,
-                int(dataset.height * upscale_factor),
-                int(dataset.width * upscale_factor)
+                int(dataset.height * scale_factor),
+                int(dataset.width * scale_factor)
                 ),
                 resampling=resampling 
             )
