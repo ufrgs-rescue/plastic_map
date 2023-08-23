@@ -68,7 +68,7 @@ def get_images(paths, resample_method, scaling_mode):
                                     i = len(info)-2
                                     if info[i] not in bands:
                                         bands.append(info[i])
-                            current_image = Image(directory, files_list, percent, bands, resample_method, scaling_mode)   
+                            current_image = Image(directory, files_list, polymer, submergence, color, stat, percent, bands, resample_method, scaling_mode)   
                             imagery.append(current_image)
     return imagery
 
@@ -87,7 +87,11 @@ def build_dataset(image_collection):
     column_names.append('Column') 
     for band in bands:
         column_names.append(band)
+    column_names.append('Polymer')
     column_names.append('Cover_percent')
+    column_names.append('Submergence')
+    column_names.append('Color')
+    column_names.append('Status')
     column_names.append('Label')
 
     dataset_dart = pd.DataFrame([], columns=column_names)
@@ -104,17 +108,26 @@ def build_dataset(image_collection):
                     data.append(round(float(pixel.getReflectanceValues()[band]), 4))
                 else:
                     data.append("Ausente")
+            data.append(pixel.getPolymer())
             data.append(pixel.getCoverPercent())
+            data.append(pixel.getSubmergence())
+            data.append(pixel.getColor())
+            data.append(pixel.getStatus())
             data.append(pixel.getLabel()) 
             dataset_dart.loc[i] = data
             i += 1
     return dataset_dart
 
 
-class Image:
-    def __init__(self, path, file_names, percent, bands, resample_method, scaling_mode):
+class Image: 
+    def __init__(self, path, file_names, polymer, submergence, color, status, percent, bands, resample_method, scaling_mode):
+        print(path, file_names, polymer, submergence, color, status, percent, bands, resample_method, scaling_mode)
         self.setPath(path)
         self.setFileNames(file_names)
+        self.setPolymer(polymer)
+        self.setSubmergence(submergence)
+        self.setColor(color)
+        self.setStatus(status)
         self.setResampleMethod(resample_method)
         self.setScalingMode(scaling_mode)
         self.setBands(bands)
@@ -127,6 +140,18 @@ class Image:
         
     def setFileNames(self, file_names):
         self.file_names = file_names
+    
+    def setPolymer(self, polymer):
+        self.polymer = polymer
+        
+    def setSubmergence(self, submergence):
+        self.submergence = submergence
+        
+    def setColor(self, color):
+        self.color = color
+        
+    def setStatus(self, status):
+        self.status = status
     
     def setResampleMethod(self, resample_method):
         self.resample_method = resample_method
@@ -203,11 +228,13 @@ class Image:
                         files.update({current_file.getBandName(): current_file.getData()})
                     else:
                         break
+                        
+                    self.setXSize(self.getBandsSizes()[worst_resolution][0])
+                    self.setYSize(self.getBandsSizes()[worst_resolution][1])
                 else: 
                     print("Unable to resample because scale factor is different for x and y axes")
                     break
                 
-
         
         if len(files) == len(self.getFileNames()):
             self.pixels = self.mountMultiband(files)
@@ -219,7 +246,7 @@ class Image:
         pixels = []
         for n_line in range(self.getXSize()):
             for n_col in range(self.getYSize()):
-                current_pixel = Pixel(n_line, n_col, self.getPath())
+                current_pixel = Pixel(n_line, n_col, self.getPath(), self.getPolymer(), self.getSubmergence(), self.getColor(), self.getStatus())
                 for key in files:
                     current_pixel.setReflectanceValues(key, files[key][n_line][n_col])                   
                 pixels.append(current_pixel)
@@ -240,14 +267,14 @@ class Image:
                 
     def setAreaLabel(self, first_line, last_line, first_column, last_column, label):
         area = []
-        for i in range(first_line, last_line + 1): #+1 é pq funcao range nao inclui o numero informado no parametro stop
+        for i in range(first_line, last_line + 1): #+1 is used because the range function does not include the informed number in the "stop" parameter
             for j in range(first_column, last_column + 1):
                 area.append((i, j, label))
         self.setLabelsMap(area)
     
     def setGridLabel(self, first_line, last_line, line_step, first_column, last_column, column_step, label):
         grid_targets = []
-        for i in range(first_line, last_line + 1, line_step): #+1 é pq funcao range nao inclui o numero informado no parametro stop
+        for i in range(first_line, last_line + 1, line_step): #+1 is used because the range function does not include the informed number in the "stop" parameter
             for j in range(first_column, last_column + 1, column_step):
                 grid_targets.append((i, j, label))
         self.setLabelsMap(grid_targets)
@@ -263,6 +290,18 @@ class Image:
 
     def getFileNames(self):
         return self.file_names
+
+    def getPolymer(self):
+        return self.polymer
+    
+    def getSubmergence(self):
+        return self.submergence
+    
+    def getColor(self):
+        return self.color
+    
+    def getStatus(self):
+        return self.status
 
     def getResampleMethod(self):
         return self.resample_method
@@ -351,10 +390,14 @@ class Band:
 
     
 class Pixel:
-    def __init__(self, line, col, image_name):
+    def __init__(self, line, col, image_name, polymer, submergence, color, status):
         self.setImageName(image_name)
         self.setLine(line)
         self.setColumn(col)
+        self.setPolymer(polymer)
+        self.setSubmergence(submergence)
+        self.setColor(color)
+        self.setStatus(status)
         self.initReflectanceValues()
   
     def setImageName(self, image_name):
@@ -380,6 +423,18 @@ class Pixel:
             self.cover_percent = percent
         else:
             self.cover_percent = 0
+            
+    def setPolymer(self, polymer):
+        self.polymer = polymer
+        
+    def setSubmergence(self, submergence):
+        self.submergence = submergence
+        
+    def setColor(self, color):
+        self.color = color
+        
+    def setStatus(self, status):
+        self.status = status
 
     def initReflectanceValues(self):
         self.reflectance_values = {}
@@ -395,6 +450,18 @@ class Pixel:
 
     def getColumn(self):
         return self.column
+    
+    def getPolymer(self):
+        return self.polymer
+    
+    def getSubmergence(self):
+        return self.submergence
+    
+    def getColor(self):
+        return self.color
+    
+    def getStatus(self):
+        return self.status
 
     def getLabel(self): 
         return self.label
