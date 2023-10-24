@@ -23,6 +23,8 @@ def extraction_s0(path, export, file_names):
             os.makedirs(export)
         except:
             print("Error when trying to create directory")
+            
+    paths = []
         
     polymers = dict()
     polymers_list = os.listdir(path)
@@ -50,14 +52,14 @@ def extraction_s0(path, export, file_names):
                 #print(export+'/'+polymer+'/S0/Transparent/Wet/'+percent, polymer+'_'+band+'_'+percent+'.mpr')
                 #print('--------------')
                 
-                subpath = path+polymer+'/'+percent+'/'+band+'/BroadBand/'+band+'/'+band+'/BRF/ITERX/IMAGES_DART/'
+                paths.append([path+polymer+'/'+percent+'/'+band+'/BroadBand/'+band+'/'+band+'/BRF/ITERX/IMAGES_DART/'+file_names[0],
+                             export+polymer+'/'+percent+'/'+file_names[0]])
+                #subpath = path+polymer+'/'+percent+'/'+band+'/BroadBand/'+band+'/'+band+'/BRF/ITERX/IMAGES_DART/'
                 #for file_name in file_names:
                 #    ext = str(file_name).split('.')[len(str(file_name).split('.'))-1]
                 #    shutil.move(file_name, export+'/'+polymer+'/S0/Transparent/Wet/'+percent+'/'+polymer+'_'+band+'_'+percent+'.'+ext)
                 #    print("Sucesso")
                 
-                print(subpath)      
-                print(os.listdir(subpath))
                 
                 os.chdir('../')
                 #os.chdir('../')
@@ -80,7 +82,7 @@ def extraction_s0(path, export, file_names):
     #                except:
     #                    print("Error when trying to create directory")
   
-    return path, export, polymers
+    return paths
 
 
 def open_folders(path):
