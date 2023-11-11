@@ -11,6 +11,20 @@ __name__ = "dart_files"
 
 
 def extraction(path, export, file_names, s, color, status, polymer):
+    """
+    Receives source and destination paths, along with configuration information for simulations, reflected in the source directory organization structured according to the model: <source_folder/polymer/coverage_percentage/band/*simulation files*>. This method creates destination folders (if needed) and returns a list of export paths for files with identifiable names, following the model export/s/color/status/percent/polymer_band_percent.extension.
+
+    :param path: str - source path of raw simulation
+    :param export: str - destination path of raw simulation
+    :param file_names: str - default filenames in simulation
+    :param s: str - submersion of polymer in the format S<submersion in cm> (e.g., 'S2' means 2 cm of submersion)
+    :param color: str - polymer color
+    :param status: str - polymer status (Dry, Wet, or Submerged)
+    :param polymer: str - polymer name
+
+    :return paths: list of export paths for files with identifiable names, following the model export/s/color/status/percent/polymer_band_percent.extension
+    """
+    
     if path[len(path)-1] == "/":
         pass
     else:
@@ -27,72 +41,36 @@ def extraction(path, export, file_names, s, color, status, polymer):
         try:
             os.makedirs(export)
         except:
-            print("Error when trying to create directory")
+            print("Error trying to create directory ", export)
             
     paths = []
-        
-    #polymers = dict()
-    #polymers_list = os.listdir(path)
+    
     percents = dict()
     percents_list = os.listdir(path)
     os.chdir(path)
     
-    #for polymer in polymers_list:
-    #    os.chdir(polymer)
-    #    percents_list = os.listdir()
-    #    percents = dict()
     for percent in percents_list:
         os.chdir(percent)
         bands_list = os.listdir()
         bands = dict()
         for band in bands_list:
             os.chdir(band)
-    #        status_list = os.listdir()
-    #        status = dict()
-    #        for stat in status_list:
-    #            os.chdir(stat)
-    #            status[stat] = os.listdir()
-    #            os.chdir('../')
             bands[band] = os.listdir()
-            #os.chdir('BroadBand/'+band+'/'+band+'/BRF/ITERX/IMAGES_DART/')
-            #print(os.listdir())
-            #print(export+'/'+polymer+'/S0/Transparent/Wet/'+percent, polymer+'_'+band+'_'+percent+'.mpr')
-            #print('--------------')
 
             for f in range(len(file_names)):
                 ext = str(file_names[f]).split('.')[len(str(file_names[f]).split('.'))-1]
                 paths.append([path+percent+'/'+band+'/BroadBand/'+band+'/'+band+'/BRF/ITERX/IMAGES_DART/'+file_names[f],
                          export+s+'/'+color+'/'+status+'/'+percent+'/',
                          polymer+'_'+band+'_'+percent+'.'+ext])
-            #subpath = path+polymer+'/'+percent+'/'+band+'/BroadBand/'+band+'/'+band+'/BRF/ITERX/IMAGES_DART/'
-            #for file_name in file_names:
-            #    ext = str(file_name).split('.')[len(str(file_name).split('.'))-1]
-            #    shutil.move(file_name, export+'/'+polymer+'/S0/Transparent/Wet/'+percent+'/'+polymer+'_'+band+'_'+percent+'.'+ext)
-            #    print("Sucesso")
-
 
             os.chdir('../')
         os.chdir('../')
-            #os.chdir('../')
-            #os.chdir('../')
-            #os.chdir('../')
-            #os.chdir('../')
 
     percents[percent] = bands
     os.chdir('../')
-#polymers[polymer] = percents
-#os.chdir('../')
-
-        
-    #if os.path.exists(export+'/'+polymer+'/S0/Transparent/Wet/'+percent):
-    #                print("Já existe")
-    #            else:
-    #                try:
-    #                    os.makedirs(export+'/'+polymer+'/S0/Transparent/Wet/'+percent)
-    #                except:
-    #                    print("Error when trying to create directory")
   
     return paths
+
 
 
 def open_folders(path):
