@@ -73,7 +73,20 @@ def extraction(path, export, file_names, s, color, status, polymer):
 
 
 
-def open_folders(path):
+def get_directory_tree(path: str) -> dict:
+    """
+    Retrieves the directory tree structure from the specified source folder path.
+
+    The method returns a dictionary representing the entire directory structure. Each path in
+    the subfolders should adhere to the structure: source_folder/polymer/submersion_depth/color/status 
+    (Dry, Wet, or Submerged)/cover_percent/arquivos .asc (an individual file for each sensor band).
+
+    :param path: str - The source path for dart .asc files, following the structure 
+                  source_folder/polymer/submersion_depth/color/status (Dry, Wet, or Submerged)/
+                  cover_percent/dart .asc files for each sensor band.
+
+    :return tree: dict - A dictionary containing the source path and the complete directory tree.
+    """
     
     if path[len(path)-1] == "/":
         pass
@@ -107,7 +120,8 @@ def open_folders(path):
         polymers[polymer] = submergences
         os.chdir('../')
   
-    return path, polymers
+    #return path, polymers
+    return tree
 
 
 def get_images(paths, resample_method, scaling_mode):
