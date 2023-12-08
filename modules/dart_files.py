@@ -79,11 +79,11 @@ def get_directory_tree(path: str) -> dict:
 
     The method returns a dictionary representing the entire directory structure. Each path in
     the subfolders should adhere to the structure: source_folder/polymer/submersion_depth/color/status 
-    (Dry, Wet, or Submerged)/cover_percent/arquivos .asc (an individual file for each sensor band).
+    (Dry, Wet, or Submerged)/cover_percent/dart .asc files (an individual file for each sensor band).
 
     :param path: str - The source path for dart .asc files, following the structure 
                   source_folder/polymer/submersion_depth/color/status (Dry, Wet, or Submerged)/
-                  cover_percent/dart .asc files for each sensor band.
+                  cover_percent/dart .asc files (an individual file for each sensor band).
 
     :return tree: dict - A dictionary containing the source path and the complete directory tree.
     """
@@ -125,9 +125,24 @@ def get_directory_tree(path: str) -> dict:
 
 
 def get_images(paths, resample_method, scaling_mode):
+    """
+    Retrieves the DART .asc files from the directory tree structure received using the resampling strategy defined.
+
+    The method returns a set of Image objects representing the DART dataset. The directory tree should adhere to the structure: source_folder/polymer/submersion_depth/color/status (Dry, Wet, or Submerged)/cover_percent/arquivos .asc (an individual file for each sensor band). Os nomes dos arquivos precisam estar no padrão polimero_banda_percentualdecobertura.asc (ex: LDPE_Blue_100.asc). Os métodos de reamostragem podem ser interpolação bilinear ("bilinear"), interpolação cúbica ("cubic") ou vizinho mais próximo ("nearest", método padrão). scaling_mode pode ser "up" for upscale or "down" for downscale.  
+            resampling = Resampling.cubic
+        else: 
+            resampling = Resampling.nearest
+         
+
+    :param path: str - The source path for dart .asc files, following the structure 
+                  source_folder/polymer/submersion_depth/color/status (Dry, Wet, or Submerged)/
+                  cover_percent/dart .asc files (an individual file for each sensor band).
+
+    :return tree: dict - A dictionary containing the source path and the complete directory tree.
+    """
     imagery = []
-    for path in paths.keys():
-        polymers = paths[path]
+    for path in paths.values():
+        polymers = path[1]
         for polymer in polymers.keys():
             submergences = polymers[polymer]
             for submergence in submergences.keys():
