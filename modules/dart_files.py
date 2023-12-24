@@ -4,6 +4,7 @@ import operator
 import pandas as pd
 import rasterio
 from rasterio.enums import Resampling
+from sklearn.preprocessing import MinMaxScaler
 import shutil
 
 
@@ -211,6 +212,59 @@ def build_dataset(image_collection):
             dataset_dart.loc[i] = data
             i += 1
     return dataset_dart
+
+
+
+def format_dataset(dataset, dataset_name, feature_names, radiometric_indexes):
+    #Deletar coluna extra com ids do csv
+    dataset.drop('Unnamed: 0', axis=1, inplace=True)
+    
+    #PODE SER RETORNADO SE NECESSARIO
+    deleted_samples = dict()
+    
+    #Traduzir labels
+    dart_label = []
+    for i in range(len(dataset)):
+        if dataset.at[i, 'Label'] == 'Water':
+            dart_label.append('Água')
+        elif dataset.at[i, 'Label'] == 'Sand':
+            dart_label.append('Areia')
+        elif dataset.at[i, 'Label'] == 'Plastic':
+            dart_label.append('Plástico')
+
+    dataset['Classe'] = dart_label
+  
+
+    #Adicionar índices
+    dataset['NDWI'] = (dataset['Green'] - dataset['NIR1']) / (dataset['Green'] + dataset['NIR1'])
+    dataset['WRI'] = (dataset['Green'] + dataset['Red']) / (dataset['NIR1'] + dataset['SWIR2'])
+    dataset['NDVI'] = (dataset['NIR1'] - dataset['Red']) / (dataset['NIR1'] + dataset['Red'])
+    dataset['AWEI'] = 4 * (dataset['Green'] - dataset['SWIR2']) - (0.25 * dataset['NIR1'] + 2.75 * dataset['SWIR1'])
+    dataset['MNDWI'] = (dataset['Green'] - dataset['SWIR2']) / (dataset['Green'] + dataset['SWIR2'])
+    dataset['SR'] = dataset['NIR1'] / dataset['Red']
+    dataset['PI'] = dataset['NIR1'] / (dataset['NIR1'] + dataset['Red'])
+    dataset['RNDVI'] = (dataset['Red'] - dataset['NIR1']) / (dataset['Red'] + dataset['NIR1'])
+    dataset['FDI'] = dataset['NIR1'] - (dataset['RedEdge2'] + (dataset['SWIR1'] - dataset['RedEdge2']) * ((dataset['NIR1'] - dataset['Red']) / (dataset['SWIR1'] - dataset['Red'])) * 10)
+    
+    #Resolver divisões por zero no cálculo dos índices
+    for ind in radiometric_indexes:
+        query = ind+' < -1000'
+        indexes = dataset.query(query).index
+        if len(indexes) > 0:
+            deleted_samples.update({dataset_name: indexes})
+            dataset.drop(indexes,  axis=0, inplace=True)
+            
+    #NORMALIZAR INDICES
+    for ind in radiometric_indexes:
+        query = ind+' < -1 or '+ind+' > 1'
+        indexes = dataset.query(query).index
+        if len(indexes) > 0:
+            feature_to_rescale = dataset[ind].values.reshape(-1, 1)
+            scaler = MinMaxScaler(feature_range=(-1, 1))
+            dataset[ind] = scaler.fit_transform(feature_to_rescale)
+    
+    return dataset
+
 
 
 class Image: 
