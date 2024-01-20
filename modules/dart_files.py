@@ -229,6 +229,8 @@ def format_dataset(dataset, dataset_name, feature_names, radiometric_indexes):
             dart_label.append('Água')
         elif dataset.at[i, 'Label'] == 'Sand':
             dart_label.append('Areia')
+        elif dataset.at[i, 'Label'] == 'Whitecap':
+            dart_label.append('Espuma')
         elif dataset.at[i, 'Label'] == 'Plastic':
             dart_label.append('Plástico')
 
@@ -264,6 +266,78 @@ def format_dataset(dataset, dataset_name, feature_names, radiometric_indexes):
             dataset[ind] = scaler.fit_transform(feature_to_rescale)
     
     return dataset
+
+
+def get_subdatasets(dataset):
+    subdatasets = dict()
+    subdatasets['water'] = dataset.loc[dataset['Label'] == "Water"].copy()
+    subdatasets['sand'] = dataset.loc[dataset['Label'] == "Sand"].copy()
+    subdatasets['plastic'] = dataset.loc[dataset['Label'] == "Plastic"].copy()
+    subdatasets['whitecap'] = dataset.loc[dataset['Label'] == "Whitecap"].copy()
+    subdatasets['plastic_and_water'] = dataset.query("Label == 'Plastic' or Label == 'Water'").copy()
+    
+    dart_plastic_in_water, dart_plastic_in_sand, dart_plastic_in_whitecap = [], [], []
+
+    for i in subdatasets['plastic'].index:
+        if subdatasets['plastic'].at[i, 'Path'].find("Espuma") > 0:
+            dart_plastic_in_whitecap.append(subdatasets['plastic'].loc[i])
+        elif dataset.at[i + 1, 'Label'] == "Sand": 
+                dart_plastic_in_sand.append(subdatasets['plastic'].loc[i])
+        else:
+            dart_plastic_in_water.append(subdatasets['plastic'].loc[i])
+
+    subdatasets['plastic_in_water'], subdatasets['plastic_in_sand'], subdatasets['plastic_in_whitecap'] = pd.DataFrame(dart_plastic_in_water, columns=subdatasets['plastic'].columns), pd.DataFrame(dart_plastic_in_sand, columns=subdatasets['plastic'].columns), pd.DataFrame(dart_plastic_in_whitecap, columns=subdatasets['plastic'].columns)
+        
+    subdatasets['plastic_20'] = subdatasets['plastic'].query("Cover_percent == 20")
+    subdatasets['plastic_40'] = subdatasets['plastic'].query("Cover_percent == 40")
+    subdatasets['plastic_60'] = subdatasets['plastic'].query("Cover_percent == 60")
+    subdatasets['plastic_80'] = subdatasets['plastic'].query("Cover_percent == 80")
+    subdatasets['plastic_100'] = subdatasets['plastic'].query("Cover_percent == 100")
+    
+    subdatasets['plastic_ldpe'] = subdatasets['plastic'].query("Polymer == 'LDPE'")
+    subdatasets['plastic_micronapo'] = subdatasets['plastic'].query("Polymer == 'MicroNapo'")
+    subdatasets['plastic_nylon'] = subdatasets['plastic'].query("Polymer == 'Nylon'")
+    subdatasets['plastic_pet'] = subdatasets['plastic'].query("Polymer == 'PET'")
+    subdatasets['plastic_pp'] = subdatasets['plastic'].query("Polymer == 'PP'")
+    subdatasets['plastic_pvc'] = subdatasets['plastic'].query("Polymer == 'PVC'")
+    
+    return subdatasets
+
+
+def get_subdatasets_2(dataset):#cubic estava dando erro por causa de index faltando (no futuro, unir metodos e usar try except pra tratar erros)
+    subdatasets = dict()
+    subdatasets['water'] = dataset.loc[dataset['Label'] == "Water"].copy()
+    subdatasets['sand'] = dataset.loc[dataset['Label'] == "Sand"].copy()
+    subdatasets['plastic'] = dataset.loc[dataset['Label'] == "Plastic"].copy()
+    subdatasets['whitecap'] = dataset.loc[dataset['Label'] == "Whitecap"].copy()
+    
+    dart_plastic_in_water, dart_plastic_in_sand, dart_plastic_in_whitecap = [], [], []
+
+    for i in subdatasets['plastic'].index:
+        if subdatasets['plastic'].at[i, 'Path'].find("Espuma") > 0:
+            dart_plastic_in_whitecap.append(subdatasets['plastic'].loc[i])
+        elif dataset.at[i - 1, 'Label'] == "Sand": 
+                dart_plastic_in_sand.append(subdatasets['plastic'].loc[i])
+        else:
+            dart_plastic_in_water.append(subdatasets['plastic'].loc[i])
+
+    subdatasets['plastic_in_water'], subdatasets['plastic_in_sand'], subdatasets['plastic_in_whitecap'] = pd.DataFrame(dart_plastic_in_water, columns=subdatasets['plastic'].columns), pd.DataFrame(dart_plastic_in_sand, columns=subdatasets['plastic'].columns), pd.DataFrame(dart_plastic_in_whitecap, columns=subdatasets['plastic'].columns)
+        
+    subdatasets['plastic_20'] = subdatasets['plastic'].query("Cover_percent == 20")
+    subdatasets['plastic_40'] = subdatasets['plastic'].query("Cover_percent == 40")
+    subdatasets['plastic_60'] = subdatasets['plastic'].query("Cover_percent == 60")
+    subdatasets['plastic_80'] = subdatasets['plastic'].query("Cover_percent == 80")
+    subdatasets['plastic_100'] = subdatasets['plastic'].query("Cover_percent == 100")
+    
+    subdatasets['plastic_ldpe'] = subdatasets['plastic'].query("Polymer == 'LDPE'")
+    subdatasets['plastic_micronapo'] = subdatasets['plastic'].query("Polymer == 'MicroNapo'")
+    subdatasets['plastic_nylon'] = subdatasets['plastic'].query("Polymer == 'Nylon'")
+    subdatasets['plastic_pet'] = subdatasets['plastic'].query("Polymer == 'PET'")
+    subdatasets['plastic_pp'] = subdatasets['plastic'].query("Polymer == 'PP'")
+    subdatasets['plastic_pvc'] = subdatasets['plastic'].query("Polymer == 'PVC'")
+    
+    return subdatasets
+
 
 
 
