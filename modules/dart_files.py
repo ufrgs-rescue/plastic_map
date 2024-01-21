@@ -273,6 +273,8 @@ def get_subdatasets(dataset):
     subdatasets['water'] = dataset.loc[dataset['Label'] == "Water"].copy()
     subdatasets['sand'] = dataset.loc[dataset['Label'] == "Sand"].copy()
     subdatasets['plastic'] = dataset.loc[dataset['Label'] == "Plastic"].copy()
+    subdatasets['coast'] = dataset.loc[dataset['Label'] == "Coast"].copy()
+    subdatasets['wood'] = dataset.loc[dataset['Label'] == "Wood"].copy()
     subdatasets['whitecap'] = dataset.loc[dataset['Label'] == "Whitecap"].copy()
     subdatasets['plastic_and_water'] = dataset.query("Label == 'Plastic' or Label == 'Water'").copy()
     
