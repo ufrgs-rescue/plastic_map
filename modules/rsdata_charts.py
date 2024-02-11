@@ -295,7 +295,7 @@ def bar_chart(datasets_names, traces, labels, color, line_color, chart_title, x_
                             color=line_color,
                             width=1),
                         ),
-                    orientation=legend_orientation)),
+                    orientation=orientation)),
                     row=1, col=1
                 )
             

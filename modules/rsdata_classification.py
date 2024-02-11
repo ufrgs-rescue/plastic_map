@@ -6,6 +6,7 @@ from plotly.subplots import make_subplots
 py.init_notebook_mode(connected=True)
 from modules import rsdata_charts
 from sklearn.cluster import KMeans
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, balanced_accuracy_score, confusion_matrix, f1_score, fbeta_score, jaccard_score, log_loss, precision_score, recall_score, roc_auc_score #ver se precisa tudo isso
 from sklearn.model_selection import train_test_split
 from sklearn.neural_network import MLPClassifier
@@ -250,6 +251,40 @@ def multilayer_perceptron(X, y, X_real, y_real, n_epochs):
         hits = X_real.loc[assessment[i].query('Status == True').index]
         
     return assessment, errors, hits, confusion_matrices, acc, b_acc, f1_macro, f1_weighted, fbeta_macro, fbeta_weighted, pr_macro, rc_macro, pr_weighted, rc_weighted
+
+def random_forest(X, y, X_real, y_real, feature_names):   
+    # holdout #Nao tem porque sao conjunstos distintos
+    #X_train, X_test, y_train, y_test = train_test_split(X, y, stratify=y, test_size=0.25, random_state=123)
+        
+    random_forest = RandomForestClassifier(max_depth=3, random_state=123)
+    random_forest.fit(X,y)
+    y_true = y_real
+    y_pred = random_forest.predict(X_real)
+
+    error_analysis = pd.DataFrame([],columns=['Real', 'Prediction', 'Status'])
+    error_analysis['Real'] = y_real
+    error_analysis['Prediction'] =  y_pred
+    error_analysis['Status'] = (error_analysis['Prediction'] == error_analysis['Real'])
+        
+    assessment = error_analysis
+    confusion_matrices = confusion_matrix(y_real, y_pred, labels=['Water', 'Plastic'])
+    acc = accuracy_score(y_real, y_pred) 
+    b_acc = balanced_accuracy_score(y_real, y_pred)
+    f1_macro = f1_score(y_real, y_pred, average='macro')#F1micro é igual a acurácia geral
+    f1_weighted = f1_score(y_real, y_pred, average='weighted')
+    fbeta_macro = fbeta_score(y_real, y_pred, average='macro', beta=0.5)
+    fbeta_weighted = fbeta_score(y_real, y_pred, average='weighted', beta=0.5)
+    pr_macro = precision_score(y_real, y_pred, average='macro')
+    pr_weighted = precision_score(y_real, y_pred, average='weighted')
+    rc_macro = recall_score(y_real, y_pred, average='macro')
+    rc_weighted = recall_score(y_real, y_pred, average='weighted')
+        
+    errors = X_real.loc[assessment.query('Status == False').index]
+    hits = X_real.loc[assessment.query('Status == True').index]
+    
+    feature_importances = pd.Series(data=random_forest.feature_importances_, index=feature_names)
+        
+    return assessment, errors, hits, confusion_matrices, acc, b_acc, f1_macro, f1_weighted, fbeta_macro, fbeta_weighted, pr_macro, rc_macro, pr_weighted, rc_weighted, feature_importances
 
 def stats_classification(assessment, ground_truth):   
     errors_bags = []

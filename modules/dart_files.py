@@ -303,6 +303,20 @@ def get_subdatasets(dataset):
     subdatasets['plastic_pp'] = subdatasets['plastic'].query("Polymer == 'PP'")
     subdatasets['plastic_pvc'] = subdatasets['plastic'].query("Polymer == 'PVC'")
     
+    subdatasets['plastic_0cm'] = subdatasets['plastic'].query("Submergence == '0' or Submergence == 0").copy()
+    subdatasets['plastic_2cm'] = subdatasets['plastic'].query("Submergence == '2cm'").copy()
+    subdatasets['plastic_5cm'] = subdatasets['plastic'].query("Submergence == '5cm'").copy()
+    
+    subdatasets['plastic_orange'] = subdatasets['plastic'].query("Color == 'Orange'").copy()
+    subdatasets['plastic_transparent'] = subdatasets['plastic'].query("Color == 'Transparent'").copy()
+    subdatasets['plastic_white'] = subdatasets['plastic'].query("Color == 'White'").copy()
+    subdatasets['plastic_nocolor'] = subdatasets['plastic'].query("Color == '-'").copy()
+    
+    subdatasets['plastic_dry'] = subdatasets['plastic'].query("Status == 'Dry'").copy()
+    subdatasets['plastic_wet'] = subdatasets['plastic'].query("Status == 'Wet'").copy()
+    subdatasets['plastic_submerged'] = subdatasets['plastic'].query("Status == 'Submerged'").copy()
+    subdatasets['plastic_nosubmersion'] = subdatasets['plastic'].query("Status == '-'").copy()
+    
     return subdatasets
 
 
@@ -337,6 +351,20 @@ def get_subdatasets_2(dataset):#cubic estava dando erro por causa de index falta
     subdatasets['plastic_pet'] = subdatasets['plastic'].query("Polymer == 'PET'")
     subdatasets['plastic_pp'] = subdatasets['plastic'].query("Polymer == 'PP'")
     subdatasets['plastic_pvc'] = subdatasets['plastic'].query("Polymer == 'PVC'")
+    
+    subdatasets['plastic_0cm'] = subdatasets['plastic'].query("Submergence == '0' or Submergence == 0").copy()
+    subdatasets['plastic_2cm'] = subdatasets['plastic'].query("Submergence == '2cm'").copy()
+    subdatasets['plastic_5cm'] = subdatasets['plastic'].query("Submergence == '5cm'").copy()
+    
+    subdatasets['plastic_orange'] = subdatasets['plastic'].query("Color == 'Orange'").copy()
+    subdatasets['plastic_transparent'] = subdatasets['plastic'].query("Color == 'Transparent'").copy()
+    subdatasets['plastic_white'] = subdatasets['plastic'].query("Color == 'White'").copy()
+    subdatasets['plastic_nocolor'] = subdatasets['plastic'].query("Color == '-'").copy()
+    
+    subdatasets['plastic_dry'] = subdatasets['plastic'].query("Status == 'Dry'").copy()
+    subdatasets['plastic_wet'] = subdatasets['plastic'].query("Status == 'Wet'").copy()
+    subdatasets['plastic_submerged'] = subdatasets['plastic'].query("Status == 'Submerged'").copy()
+    subdatasets['plastic_nosubmersion'] = subdatasets['plastic'].query("Status == '-'").copy()
     
     return subdatasets
 
