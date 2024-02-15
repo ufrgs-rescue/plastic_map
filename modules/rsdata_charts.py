@@ -1,3 +1,4 @@
+import os
 import plotly.express as px
 import plotly.graph_objs as go
 import plotly.offline as py
@@ -5,6 +6,23 @@ from plotly.subplots import make_subplots
 py.init_notebook_mode(connected=True)
 
 __name__ = "rsdata_charts"
+
+def check_path(path):
+    if path[len(path)-1] == '/':
+        path = path[0:len(path)-1]
+        
+    path = path.split('/')
+
+    for directory in path: 
+        if os.path.isdir(directory):
+            os.chdir(directory)
+        else: 
+            os.mkdir(directory)
+            os.chdir(directory)
+
+    for directory in path: 
+        os.chdir('../')
+        
 
 def pie_chart(datasets, labels, datasets_names, chart_title, height, width, colors, export_name):  
         if len(datasets) == len(labels) and len(datasets_names) == len(labels):
@@ -130,7 +148,7 @@ def line_chart(datasets_names, traces, labels, legends, modes, colors, chart_tit
                 f.write(fig.to_html())
                 
         elif guidance == "horizontal": 
-            if len(datasets_names) <= 4:
+            if len(datasets_names) <= 5:
                 with open(export_name+".html", 'a', encoding='utf-8') as f:
                     fig = make_subplots(rows=1, cols=len(datasets_names),
                                     shared_yaxes=True,
@@ -200,7 +218,7 @@ def line_chart(datasets_names, traces, labels, legends, modes, colors, chart_tit
                     fig.write_image(export_name+".jpeg")
                     f.write(fig.to_html())
             else:
-                print("Maximum 4 data sets exceeded. Try to spread your data over more than one chart.")
+                print("Maximum 5 data sets exceeded. Try to spread your data over more than one chart.")
                 
         elif guidance == "vertical": 
             with open(export_name+".html", 'a', encoding='utf-8') as f:
@@ -611,7 +629,7 @@ def stackedbars_chart(datasets_names, traces, bands, n_bins, labels, labels_grou
                 
                 for i in range(len(datasets_names)): 
                     trace = traces[i]
-                    band = bands[i]
+                    band = bands[0]
                     label = labels[i]
                     color = colors[i]
                     

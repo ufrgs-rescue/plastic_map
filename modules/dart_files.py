@@ -1009,10 +1009,10 @@ def get_subdatasets(dataset):
     subdatasets['plastic_mix'] = subdatasets['plastic'].query('Polymer == "Bags and Bottles"').copy()
 
     subdatasets['plastic_submerged'] = subdatasets['plastic'].query("Status == 'Submerged'").copy()
-    subdatasets['plastic_wet'] = usgs_subdatasets['plastic'].query("Status == 'Wet'").copy()
-    subdatasets['plastic_dry'] = usgs_subdatasets['plastic'].query("Status == 'Dry'").copy()
-    subdatasets['plastic_floating'] = usgs_subdatasets['plastic'].query("Detailed_status == 'Floating'").copy()
-    subdatasets['plastic_psub'] = usgs_subdatasets['plastic'].query("Detailed_status == 'Partially submerged'").copy()
+    subdatasets['plastic_wet'] = subdatasets['plastic'].query("Status == 'Wet'").copy()
+    subdatasets['plastic_dry'] = subdatasets['plastic'].query("Status == 'Dry'").copy()
+    subdatasets['plastic_floating'] = subdatasets['plastic'].query("Detailed_status == 'Floating'").copy()
+    subdatasets['plastic_psub'] = subdatasets['plastic'].query("Detailed_status == 'Partially submerged'").copy()
     subdatasets['plastic_sub0cm'] = subdatasets['plastic'].query("Submergence == '0' or Submergence == 0").copy()
     subdatasets['plastic_sub2cm'] = subdatasets['plastic'].query("Submergence == '2cm'").copy()
     subdatasets['plastic_sub5cm'] = subdatasets['plastic'].query("Submergence == '5cm'").copy()
@@ -1029,15 +1029,15 @@ def get_subdatasets(dataset):
     
     if 'Year' in dataset.columns:
         subdatasets['plp2021'] = dataset.query('Year == "2021"').copy()
-        subdatasets['plp2019'] = dataset.loc[dataset_usgs['Year'] == "2019"].copy()
-        subdatasets['plp2021_plastic_water'] = usgs_subdatasets['plp2021'].query('Label == "Plastic" or Label == "Water"').copy()
-        subdatasets['plp2019_plastic_water'] = usgs_subdatasets['plp2019'].query('Label == "Plastic" or Label == "Water"').copy()
+        subdatasets['plp2019'] = dataset.query('Year == "2019"').copy()
+        subdatasets['plp2021_plastic_water'] = subdatasets['plp2021'].query('Label == "Plastic" or Label == "Water"').copy()
+        subdatasets['plp2019_plastic_water'] = subdatasets['plp2019'].query('Label == "Plastic" or Label == "Water"').copy()
 
-    subdatasets['wood_-100'] = usgs_subdatasets['wood'].query('Cover_percent < -99').copy()
+    subdatasets['wood_-100'] = subdatasets['wood'].query('Cover_percent < -99').copy()
     cover_percents = []
     for i in range(len(subdatasets['wood_-100'])):
         cover_percents.append("Unknown")
-        subdatasets['wood_-100']['Cover_percent'] = cover_percents
+    subdatasets['wood_-100']['Cover_percent'] = cover_percents
 
     subdatasets['wood_-000'] = subdatasets['wood'].query('Cover_percent < 0 and Cover_percent > -99').copy()
     cover_percents = []
