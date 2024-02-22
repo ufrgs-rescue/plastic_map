@@ -662,7 +662,7 @@ def map_nn(date, ground_truth, classified_data, path, caminho, height, width): #
     #English
     mapa = []
     color = []
-    data = ground_truth.query("Path == '"+date+"'")
+    data = ground_truth.query("Simple_Path == '"+date+"'")
     
     for i in range(len(set(list(data['Line']))) - 1):
         map_line = []
@@ -705,7 +705,7 @@ def map_nn(date, ground_truth, classified_data, path, caminho, height, width): #
     #Portuguese
     mapa = []
     color = []
-    data = ground_truth.query("Path == '"+date+"'")
+    data = ground_truth.query("Simple_Path == '"+date+"'")
     
     for i in range(len(set(list(data['Line']))) - 1):
         map_line = []
@@ -746,20 +746,20 @@ def map_nn(date, ground_truth, classified_data, path, caminho, height, width): #
         f.write(fig.to_html())
         
 
-    '''
+    
     #---------------------------
     #Classification spacial info
     #English
     mapa = []
     color = []
-    data = classified_data.query("Path == '"+date+"'")
+    data = classified_data.query("Simple_Path == '"+date+"'")
 
     for i in range(len(set(list(data['Line']))) - 1):
         map_line = []
         color_line = []
         data_line = data.loc[data['Line'] == i]
         for j in range(len(set(list(data['Column']))) - 1):
-            cell = data_line.loc[data_line['Column'] == j]['Cluster'].values
+            cell = data_line.loc[data_line['Column'] == j]['Predicted_class'].values
             if len(cell) > 0:
                 map_line.append(cell[0])
                 #if cell[0] == 'Sand' or cell[0] == 'Coast':
@@ -795,14 +795,14 @@ def map_nn(date, ground_truth, classified_data, path, caminho, height, width): #
     #Portuguese
     mapa = []
     color = []
-    data = classified_data.query("Path == '"+date+"'")
+    data = classified_data.query("Simple_Path == '"+date+"'")
 
     for i in range(len(set(list(data['Line']))) - 1):
         map_line = []
         color_line = []
         data_line = data.loc[data['Line'] == i]
         for j in range(len(set(list(data['Column']))) - 1):
-            cell = data_line.loc[data_line['Column'] == j]['Cluster'].values
+            cell = data_line.loc[data_line['Column'] == j]['Predicted_class'].values
             if len(cell) > 0:
                 map_line.append(cell[0])
                 #if cell[0] == 'Areia' or cell[0] == 'Costa':
@@ -835,4 +835,4 @@ def map_nn(date, ground_truth, classified_data, path, caminho, height, width): #
                     
         f.write(fig.to_html())
     
-    '''
+    
