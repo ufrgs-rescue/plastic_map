@@ -288,6 +288,7 @@ def format_dataset(dataset, dataset_name, feature_names, radiometric_indexes):
     dataset['PI'] = dataset['NIR1'] / (dataset['NIR1'] + dataset['Red'])
     dataset['RNDVI'] = (dataset['Red'] - dataset['NIR1']) / (dataset['Red'] + dataset['NIR1'])
     dataset['FDI'] = dataset['NIR1'] - (dataset['RedEdge2'] + (dataset['SWIR1'] - dataset['RedEdge2']) * ((dataset['NIR1'] - dataset['Red']) / (dataset['SWIR1'] - dataset['Red'])) * 10)
+    dataset['PWDI'] = (dataset['NIR1'] - dataset['RedEdge3']) / (dataset['NIR1'] + dataset['RedEdge3'])
     
     #Resolver divisões por zero no cálculo dos índices
     for ind in radiometric_indexes:

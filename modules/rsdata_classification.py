@@ -592,12 +592,14 @@ def stats_classification(assessment, ground_truth):
                                              str(hits_bags['Hits_bags'].mean()) + ' (' + 
                                                 str(round(hits_bags['Hits_bags'].mean() / 
                                                 ground_truth.query('Polymer == "Bags"')['Label'].count() * 100 ,1)) + ' %)',
+                                             str(hits_bags['Hits_bags'].std()),
                                              str(hits_bags['Hits_bags'].min()) + ' (' + 
                                                 str(round(hits_bags['Hits_bags'].min() / 
                                                 ground_truth.query('Polymer == "Bags"')['Label'].count() * 100 ,1)) + ' %)', 
                                              str(hits_bags['Hits_bags'].max()) + ' (' + 
                                                 str(round(hits_bags['Hits_bags'].max() / 
                                                 ground_truth.query('Polymer == "Bags"')['Label'].count() * 100 ,1)) + ' %)',
+                                             
                                              str(ground_truth.query('Polymer == "Bags"')['Cover_percent'].mean()) + ' %'
                                         ],
                                         [
@@ -606,6 +608,7 @@ def stats_classification(assessment, ground_truth):
                                                  str(hits_bottles['Hits_bottles'].mean()) + ' (' + 
                                                  str(round(hits_bottles['Hits_bottles'].mean() / 
                                                  ground_truth.query('Polymer == "Bottles"')['Label'].count() * 100, 1)) + ' %)',
+                                             str(hits_bottles['Hits_bottles'].std()),
                                              str(hits_bottles['Hits_bottles'].min()) + ' (' + 
                                                 str(round(hits_bottles['Hits_bottles'].min() / 
                                                 ground_truth.query('Polymer == "Bottles"')['Label'].count() * 100 ,1)) + ' %)', 
@@ -620,6 +623,7 @@ def stats_classification(assessment, ground_truth):
                                                  str(hits_bags_bottles['Hits_bags_bottles'].mean()) + ' (' + 
                                                  str(round(hits_bags_bottles['Hits_bags_bottles'].mean() / 
                                                  ground_truth.query('Polymer == "Bags and Bottles"')['Label'].count() * 100, 1)) + ' %)',
+                                             str(hits_bags_bottles['Hits_bags_bottles'].std()),
                                              str(hits_bags_bottles['Hits_bags_bottles'].min()) + ' (' + 
                                                 str(round(hits_bags_bottles['Hits_bags_bottles'].min() / 
                                                 ground_truth.query('Polymer == "Bags and Bottles"')['Label'].count() * 100 ,1)) + ' %)', 
@@ -634,6 +638,7 @@ def stats_classification(assessment, ground_truth):
                                                  str(hits_hdpe['Hits_hdpe'].mean()) + ' (' + 
                                                  str(round(hits_hdpe['Hits_hdpe'].mean() / 
                                                  ground_truth.query('Polymer == "HDPE mesh"')['Label'].count() * 100, 1)) + ' %)',
+                                             str(hits_hdpe['Hits_hdpe'].std()),
                                              str(hits_hdpe['Hits_hdpe'].min()) + ' (' + 
                                                 str(round(hits_hdpe['Hits_hdpe'].min() / 
                                                 ground_truth.query('Polymer == "HDPE mesh"')['Label'].count() * 100 ,1)) + ' %)', 
@@ -653,6 +658,7 @@ def stats_classification(assessment, ground_truth):
                                              str(hits_2019_w['Hits_2019_Water'].mean()) + ' (' + 
                                                 str(round(hits_2019_w['Hits_2019_Water'].mean() / 
                                                 ground_truth.query('Label == "Water" and Year == "2019"')['Label'].count() * 100 ,1)) + ' %)',
+                                             str(round(hits_2019_w['Hits_2019_Water'].std()),
                                              str(hits_2019_w['Hits_2019_Water'].min()) + ' (' + 
                                                 str(round(hits_2019_w['Hits_2019_Water'].min() / 
                                                 ground_truth.query('Label == "Water" and Year == "2019"')['Label'].count() * 100 ,1)) + ' %)', 
@@ -668,6 +674,7 @@ def stats_classification(assessment, ground_truth):
                                                  str(hits_2019_p['Hits_2019_Plastic'].mean()) + ' (' + 
                                                  str(round(hits_2019_p['Hits_2019_Plastic'].mean() / 
                                                  ground_truth.query('Label == "Plastic" and Year == "2019"')['Label'].count() * 100, 1)) + ' %)',
+                                             str(hits_2019_p['Hits_2019_Plastic'].std()),
                                              str(hits_2019_p['Hits_2019_Plastic'].min()) + ' (' + 
                                                 str(round(hits_2019_p['Hits_2019_Plastic'].min() / 
                                                 ground_truth.query('Label == "Plastic" and Year == "2019"')['Label'].count() * 100 ,1)) + ' %)', 
@@ -683,6 +690,7 @@ def stats_classification(assessment, ground_truth):
                                                  str(hits_2021_w['Hits_2021_Water'].mean()) + ' (' + 
                                                  str(round(hits_2021_w['Hits_2021_Water'].mean() / 
                                                  ground_truth.query('Label == "Water" and Year == "2021"')['Label'].count() * 100, 1)) + ' %)',
+                                             str(hits_2021_w['Hits_2021_Water'].std())
                                              str(hits_2021_w['Hits_2021_Water'].min()) + ' (' + 
                                                 str(round(hits_2021_w['Hits_2021_Water'].min() / 
                                                 ground_truth.query('Label == "Water" and Year == "2021"')['Label'].count() * 100 ,1)) + ' %)', 
@@ -698,6 +706,7 @@ def stats_classification(assessment, ground_truth):
                                                  str(hits_2021_p['Hits_2021_Plastic'].mean()) + ' (' + 
                                                  str(round(hits_2021_p['Hits_2021_Plastic'].mean() / 
                                                  ground_truth.query('Label == "Plastic" and Year == "2021"')['Label'].count() * 100, 1)) + ' %)',
+                                             str(hits_2021_p['Hits_2021_Plastic'].std()),
                                              str(hits_2021_p['Hits_2021_Plastic'].min()) + ' (' + 
                                                 str(round(hits_2021_p['Hits_2021_Plastic'].min() / 
                                                 ground_truth.query('Label == "Plastic" and Year == "2021"')['Label'].count() * 100 ,1)) + ' %)', 
@@ -717,6 +726,7 @@ def stats_classification(assessment, ground_truth):
                                                  str(hits_cp_25['Hits_cp_25'].mean()) + ' (' + 
                                                     str(round(hits_cp_25['Hits_cp_25'].mean() / 
                                                     ground_truth.query('Label == "Plastic" and Cover_percent > 0 and Cover_percent <= 25')['Label'].count() * 100, 1)) + ' %)',
+                                                 str(hits_cp_25['Hits_cp_25'].std())
                                                  str(hits_cp_25['Hits_cp_25'].min()) + ' (' + 
                                                     str(round(hits_cp_25['Hits_cp_25'].min() / 
                                                     ground_truth.query('Label == "Plastic" and Cover_percent > 0 and Cover_percent <= 25')['Label'].count() * 100 ,1)) + ' %)', 
@@ -732,6 +742,7 @@ def stats_classification(assessment, ground_truth):
                                                  str(hits_cp_50['Hits_cp_50'].mean()) + ' (' + 
                                                  str(round(hits_cp_50['Hits_cp_50'].mean() / 
                                                  ground_truth.query('Label == "Plastic" and Cover_percent > 25 and Cover_percent <= 50')['Label'].count() * 100, 1)) + ' %)',
+                                                 str(hits_cp_50['Hits_cp_50'].std()),
                                              str(hits_cp_50['Hits_cp_50'].min()) + ' (' + 
                                                 str(round(hits_cp_50['Hits_cp_50'].min() / 
                                                 ground_truth.query('Label == "Plastic" and Cover_percent > 25 and Cover_percent <= 50')['Label'].count() * 100 ,1)) + ' %)', 
@@ -746,6 +757,7 @@ def stats_classification(assessment, ground_truth):
                                                  str(hits_cp_100['Hits_cp_100'].mean()) + ' (' + 
                                                  str(round(hits_cp_100['Hits_cp_100'].mean() / 
                                                  ground_truth.query('Label == "Plastic" and Cover_percent > 50')['Label'].count() * 100, 1)) + ' %)',
+                                             str(hits_cp_100['Hits_cp_100'].std()),
                                              str(hits_cp_100['Hits_cp_100'].min()) + ' (' + 
                                                 str(round(hits_cp_100['Hits_cp_100'].min() / 
                                                 ground_truth.query('Label == "Plastic" and Cover_percent > 50')['Label'].count() * 100 ,1)) + ' %)', 
@@ -760,6 +772,7 @@ def stats_classification(assessment, ground_truth):
                                                  str(hits_cp_unknown_100['Hits_cp_unknown_100'].mean()) + ' (' + 
                                                  str(round(hits_cp_unknown_100['Hits_cp_unknown_100'].mean() / 
                                                  ground_truth.query('Label == "Plastic" and Cover_percent == -100')['Label'].count() * 100, 1)) + ' %)',
+                                             str(hits_cp_unknown_100['Hits_cp_unknown_100'].std()),
                                              str(hits_cp_unknown_100['Hits_cp_unknown_100'].min()) + ' (' + 
                                                 str(round(hits_cp_unknown_100['Hits_cp_unknown_100'].min() / 
                                                 ground_truth.query('Label == "Plastic" and Cover_percent == -100')['Label'].count() * 100 ,1)) + ' %)', 
@@ -774,6 +787,7 @@ def stats_classification(assessment, ground_truth):
                                                  str(hits_cp_unknown['Hits_cp_unknown'].mean()) + ' (' + 
                                                  str(round(hits_cp_unknown['Hits_cp_unknown'].mean() / 
                                                  ground_truth.query('Label == "Plastic" and Cover_percent == -1')['Label'].count() * 100, 1)) + ' %)',
+                                             str(hits_cp_unknown['Hits_cp_unknown'].std()),
                                              str(hits_cp_unknown['Hits_cp_unknown'].min()) + ' (' + 
                                                 str(round(hits_cp_unknown['Hits_cp_unknown'].min() / 
                                                 ground_truth.query('Label == "Plastic" and Cover_percent == -1')['Label'].count() * 100 ,1)) + ' %)', 
@@ -783,7 +797,7 @@ def stats_classification(assessment, ground_truth):
                                              'Unknown'
                                         ]
                                     ],
-                                    columns = ['Cover_percent', 'Total', 'Mean hits', 'Min hits', 'Max hits', 'Mean cover percent'])
+                                    columns = ['Cover_percent', 'Total', 'Mean hits', 'Std hits', 'Min hits', 'Max hits', 'Mean cover percent'])
 
 
     stats_by_date = pd.DataFrame([
@@ -794,6 +808,7 @@ def stats_classification(assessment, ground_truth):
                                                  str(hits_2019_04_18['hits_2019_04_18'].mean()) + ' (' + 
                                                     str(round(hits_2019_04_18['hits_2019_04_18'].mean() / 
                                                     ground_truth.query('Path == "2019_04_18"')['Path'].count() * 100, 1)) + ' %)',
+                                                 str(hits_2019_04_18['hits_2019_04_18'].std()),
                                                  str(hits_2019_04_18['hits_2019_04_18'].min()) + ' (' + 
                                                     str(round(hits_2019_04_18['hits_2019_04_18'].min() / 
                                                     ground_truth.query('Path == "2019_04_18"')['Path'].count() * 100 ,1)) + ' %)', 
@@ -802,9 +817,11 @@ def stats_classification(assessment, ground_truth):
                                                     ground_truth.query('Path == "2019_04_18"')['Path'].count() * 100 ,1)) + ' %)',
                                                 
                                                  hits_2019_04_18_p['hits_2019_04_18'].mean(),
+                                                 hits_2019_04_18_p['hits_2019_04_18'].std(),
                                                  hits_2019_04_18_p['hits_2019_04_18'].min(), 
                                                  hits_2019_04_18_p['hits_2019_04_18'].max(),
                                                  hits_2019_04_18_w['hits_2019_04_18'].mean(),
+                                                 hits_2019_04_18_w['hits_2019_04_18'].std(),
                                                  hits_2019_04_18_w['hits_2019_04_18'].min(), 
                                                  hits_2019_04_18_w['hits_2019_04_18'].max(),
                                        
@@ -817,6 +834,7 @@ def stats_classification(assessment, ground_truth):
                                                  str(hits_2019_05_03['hits_2019_05_03'].mean()) + ' (' + 
                                                     str(round(hits_2019_05_03['hits_2019_05_03'].mean() / 
                                                     ground_truth.query('Path == "2019_05_03"')['Path'].count() * 100, 1)) + ' %)',
+                                                 str(hits_2019_05_03['hits_2019_05_03'].std()),
                                                  str(hits_2019_05_03['hits_2019_05_03'].min()) + ' (' + 
                                                     str(round(hits_2019_05_03['hits_2019_05_03'].min() / 
                                                     ground_truth.query('Path == "2019_05_03"')['Path'].count() * 100, 1)) + ' %)', 
@@ -825,9 +843,11 @@ def stats_classification(assessment, ground_truth):
                                                     ground_truth.query('Path == "2019_05_03"')['Path'].count() * 100, 1)) + ' %)',
                                                 
                                                  hits_2019_05_03_p['hits_2019_05_03'].mean(),
+                                                 hits_2019_05_03_p['hits_2019_05_03'].std(),
                                                  hits_2019_05_03_p['hits_2019_05_03'].min(), 
                                                  hits_2019_05_03_p['hits_2019_05_03'].max(),
                                                  hits_2019_05_03_w['hits_2019_05_03'].mean(),
+                                                 hits_2019_05_03_w['hits_2019_05_03'].std(),
                                                  hits_2019_05_03_w['hits_2019_05_03'].min(), 
                                                  hits_2019_05_03_w['hits_2019_05_03'].max(),
                                                 
@@ -841,6 +861,7 @@ def stats_classification(assessment, ground_truth):
                                                  str(hits_2019_05_18['hits_2019_05_18'].mean()) + ' (' + 
                                                     str(round(hits_2019_05_18['hits_2019_05_18'].mean() / 
                                                     ground_truth.query('Path == "2019_05_18"')['Path'].count() * 100, 1)) + ' %)',
+                                                 str(hits_2019_05_18['hits_2019_05_18'].std())
                                                  str(hits_2019_05_18['hits_2019_05_18'].min()) + ' (' + 
                                                     str(round(hits_2019_05_18['hits_2019_05_18'].min() / 
                                                     ground_truth.query('Path == "2019_05_18"')['Path'].count() * 100, 1)) + ' %)', 
@@ -849,9 +870,11 @@ def stats_classification(assessment, ground_truth):
                                                     ground_truth.query('Path == "2019_05_18"')['Path'].count() * 100, 1)) + ' %)',
                                                 
                                                  hits_2019_05_18_p['hits_2019_05_18'].mean(),
+                                                 hits_2019_05_18_p['hits_2019_05_18'].std(),
                                                  hits_2019_05_18_p['hits_2019_05_18'].min(), 
                                                  hits_2019_05_18_p['hits_2019_05_18'].max(),
                                                  hits_2019_05_18_w['hits_2019_05_18'].mean(),
+                                                 hits_2019_05_18_w['hits_2019_05_18'].std(),
                                                  hits_2019_05_18_w['hits_2019_05_18'].min(), 
                                                  hits_2019_05_18_w['hits_2019_05_18'].max(),
                                                 
