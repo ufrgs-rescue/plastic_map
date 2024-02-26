@@ -701,7 +701,7 @@ def format_dataset(dataset, dataset_name, feature_names, radiometric_indexes):
                                            zip(dataset['Status'], dataset['Submergence'])]
         
     
-    elif 'Artificial' not in dataset.columns:#dataset_usgs
+    elif 'Artificial' not in dataset.columns:#dataset_usgs #ARRUMAR - DART 2021 entrou aqui 
         dataset['Status'] = ['Wet' if path == '2021_08_25'
                               else 'Dry' for path in dataset['Path']]
         
