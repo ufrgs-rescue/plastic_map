@@ -599,7 +599,9 @@ def build_dataset(image_collection):
             i += 1
     return dataset_dart
 
-
+"""
+    End of DART 2023 data (simulated) extraction
+"""
 
 def format_dataset(dataset, dataset_name, feature_names, radiometric_indexes):
     #Deletar coluna extra com ids do csv
@@ -1447,7 +1449,7 @@ def get_subdatasets(dataset):
 
 class Image: 
     def __init__(self, path, file_names, polymer, submergence, color, status, percent, bands, resample_method, scaling_mode):
-        print(path, file_names, polymer, submergence, color, status, percent, bands, resample_method, scaling_mode)
+        #print(path, file_names, polymer, submergence, color, status, percent, bands, resample_method, scaling_mode)
         self.setPath(path)
         self.setFileNames(file_names)
         self.setPolymer(polymer)
@@ -1518,13 +1520,13 @@ class Image:
         self.setXSize(self.getBandsSizes()[best_resolution][0])
         self.setYSize(self.getBandsSizes()[best_resolution][1])
         
-        if best_resolution != worst_resolution:
-            if self.getScalingMode() == 'up':
-                print("The ", self.getPath()," image bands will be resampled to the higher available spatial resolution " + str(self.getBandsSizes()[best_resolution]))
-            elif self.getScalingMode() == 'down':
-                print("The ", self.getPath()," image bands will be resampled to the lower available spatial resolution " + str(self.getBandsSizes()[worst_resolution]))
-        else:
-            print("All bands have the same resolution. There is no need to resample.")
+        #if best_resolution != worst_resolution:
+            #if self.getScalingMode() == 'up':
+            #    print("The ", self.getPath()," image bands will be resampled to the higher available spatial resolution " + str(self.getBandsSizes()[best_resolution]))
+            #elif self.getScalingMode() == 'down':
+            #    print("The ", self.getPath()," image bands will be resampled to the lower available spatial resolution " + str(self.getBandsSizes()[worst_resolution]))
+        #else:
+            #print("All bands have the same resolution. There is no need to resample.")
             
         
         files = dict()

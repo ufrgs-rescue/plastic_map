@@ -98,7 +98,7 @@ def line_chart(datasets_names, traces, labels, legends, modes, colors, chart_tit
                                        name = legends[i],
                                        mode = 'markers+lines',
                                        marker =  {'color' : colors[i],
-                                                             'line' : {'width': 1,
+                                                             'line' : {'width': 5,
                                                                        'color': colors[i]}},
                                        opacity=1),
                                 row=1, col=1
@@ -110,7 +110,7 @@ def line_chart(datasets_names, traces, labels, legends, modes, colors, chart_tit
                                        name = legends[i],
                                        mode = 'lines',
                                        marker =  {'color' : colors[i],
-                                                             'line' : {'width': 1,
+                                                             'line' : {'width': 5,
                                                                        'color': colors[i]}},
                                        opacity=1),
                                 row=1, col=1
@@ -122,7 +122,8 @@ def line_chart(datasets_names, traces, labels, legends, modes, colors, chart_tit
                                        y = traces[i],
                                        name = legends[i],
                                        mode = 'lines',
-                                       line =  {'color' : colors[i],
+                                       line =  {'width': 5,
+                                                'color' : colors[i],
                                                 'dash' : 'dash'},
                                        opacity=1),
                                 row=1, col=1
@@ -134,7 +135,8 @@ def line_chart(datasets_names, traces, labels, legends, modes, colors, chart_tit
                                        y = traces[i],
                                        name = legends[i],
                                        mode = 'lines',
-                                       line =  {'color' : colors[i],
+                                       line =  {'width': 5, 
+                                                'color' : colors[i],
                                                 'dash' : 'dot'},
                                        opacity=1),
                                 row=1, col=1
@@ -142,8 +144,11 @@ def line_chart(datasets_names, traces, labels, legends, modes, colors, chart_tit
                     
                 fig.update_xaxes(title_text=x_title)
                 fig.update_yaxes(title_text=y_title)
+                fig.update_layout(font=dict(size=36))
+                fig.update_layout(annotations=[dict(font=dict(size=36))])
                 fig.update_layout(height=height, width=width, title_text=chart_title, template = 'plotly_white')
                 fig.update_layout(legend_orientation=legend_orientation)#, legend=dict(x=0.0, y=-0.4)
+                fig.update_layout(margin=dict(t=150))
                 fig.write_image(export_name+".jpeg")
                 f.write(fig.to_html())
                 
@@ -153,6 +158,7 @@ def line_chart(datasets_names, traces, labels, legends, modes, colors, chart_tit
                     fig = make_subplots(rows=1, cols=len(datasets_names),
                                     shared_yaxes=True,
                                     subplot_titles=(datasets_names))
+                    
                     for i in range(len(datasets_names)):
                         trace = traces[i]
                         label = labels[i]
@@ -169,7 +175,7 @@ def line_chart(datasets_names, traces, labels, legends, modes, colors, chart_tit
                                                name = legend[j],
                                                mode = 'markers+lines',
                                                marker =  {'color' : color[j],
-                                                                     'line' : {'width': 1,
+                                                                     'line' : {'width': 5,
                                                                                'color': color[j]}},
                                                opacity=1),
                                         row=1, col=(i+1)
@@ -181,7 +187,7 @@ def line_chart(datasets_names, traces, labels, legends, modes, colors, chart_tit
                                                name = legend[j],
                                                mode = 'lines',
                                                marker =  {'color' : color[j],
-                                                                     'line' : {'width': 1,
+                                                                     'line' : {'width': 5,
                                                                                'color': color[j]}},
                                                opacity=1),
                                         row=1, col=(i+1)
@@ -193,7 +199,8 @@ def line_chart(datasets_names, traces, labels, legends, modes, colors, chart_tit
                                                y = trace[j],
                                                name = legend[j],
                                                mode = 'lines',
-                                               line =  {'color' : color[j],
+                                               line =  {'width': 5, 
+                                                        'color' : color[j],
                                                         'dash' : 'dash'},
                                                opacity=1),
                                         row=1, col=(i+1)
@@ -205,7 +212,8 @@ def line_chart(datasets_names, traces, labels, legends, modes, colors, chart_tit
                                                y = trace[j],
                                                name = legend[j],
                                                mode = 'lines',
-                                               line =  {'color' : color[j],
+                                               line =  {'width': 5, 
+                                                        'color' : color[j],
                                                         'dash' : 'dot'},
                                                opacity=1),
                                         row=1, col=(i+1)
@@ -213,8 +221,11 @@ def line_chart(datasets_names, traces, labels, legends, modes, colors, chart_tit
 
                     fig.update_xaxes(title_text=x_title)
                     fig.update_yaxes(title_text=y_title)
+                    fig.update_layout(annotations=[dict(font=dict(size=36))])
+                    fig.update_layout(font=dict(size=36))
                     fig.update_layout(height=height, width=width, title_text=chart_title, template = 'plotly_white')
                     fig.update_layout(legend_orientation=legend_orientation) #, legend=dict(x=0.0, y=-0.4)
+                    fig.update_layout(margin=dict(t=150))
                     fig.write_image(export_name+".jpeg")
                     f.write(fig.to_html())
             else:
@@ -242,7 +253,7 @@ def line_chart(datasets_names, traces, labels, legends, modes, colors, chart_tit
                                                name = legend[j],
                                                mode = 'markers+lines',
                                                marker =  {'color' : color[j],
-                                                                     'line' : {'width': 1,
+                                                                     'line' : {'width': 5,
                                                                                'color': color[j]}},
                                                opacity=1),
                                         col=1, row=(i+1)
@@ -255,7 +266,7 @@ def line_chart(datasets_names, traces, labels, legends, modes, colors, chart_tit
                                                name = legend[j],
                                                mode = 'markers+lines',
                                                marker =  {'color' : color[j],
-                                                                     'line' : {'width': 1,
+                                                                     'line' : {'width': 5,
                                                                                'color': color[j]}},
                                                opacity=1),
                                         col=1, row=(i+1)
@@ -267,7 +278,8 @@ def line_chart(datasets_names, traces, labels, legends, modes, colors, chart_tit
                                                y = trace[j],
                                                name = legend[j],
                                                mode = 'lines',
-                                               line =  {'color' : color[j],
+                                               line =  {'width': 5, 
+                                                        'color' : color[j],
                                                         'dash' : 'dash'},
                                                opacity=1),
                                         col=1, row=(i+1)
@@ -279,7 +291,8 @@ def line_chart(datasets_names, traces, labels, legends, modes, colors, chart_tit
                                                y = trace[j],
                                                name = legend[j],
                                                mode = 'lines',
-                                               line =  {'color' : color[j],
+                                               line =  {'width': 4, 
+                                                        'color' : color[j],
                                                         'dash' : 'dot'},
                                                opacity=1),
                                         col=1, row=(i+1)
@@ -287,8 +300,11 @@ def line_chart(datasets_names, traces, labels, legends, modes, colors, chart_tit
                                 
                     fig.update_xaxes(title_text=x_title)
                     fig.update_yaxes(title_text=y_title)
+                    fig.update_layout(font=dict(size=36))
+                    fig.update_layout(annotations=[dict(font=dict(size=36))])
                     fig.update_layout(height=height, width=width, title_text=chart_title, template = 'plotly_white')
                     fig.update_layout(legend_orientation=legend_orientation)#legend=dict(x=0.0, y=-0.4)
+                    fig.update_layout(margin=dict(t=150))
                     fig.write_image(export_name+".jpeg")
                     f.write(fig.to_html())
         
