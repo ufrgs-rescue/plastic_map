@@ -61,6 +61,9 @@ def pie_chart(datasets, labels, datasets_names, chart_title, height, width, colo
                     fig.update_traces(marker=dict(colors=colors))
 
                     fig.update_traces(textinfo='label+percent+value')
+                    fig.update_layout(font=dict(size=32))
+                    fig.update_layout(annotations=[dict(font=dict(size=36))])
+                    fig.update_layout(margin=dict(t=250))
                     
                     fig.update_layout(height=height, width=width, title_text=chart_title, showlegend = False) #legend_orientation="h"
                     
@@ -146,9 +149,9 @@ def line_chart(datasets_names, traces, labels, legends, modes, colors, chart_tit
                 fig.update_yaxes(title_text=y_title)
                 fig.update_layout(font=dict(size=36))
                 fig.update_layout(annotations=[dict(font=dict(size=36))])
+                fig.update_layout(margin=dict(t=150))
                 fig.update_layout(height=height, width=width, title_text=chart_title, template = 'plotly_white')
                 fig.update_layout(legend_orientation=legend_orientation)#, legend=dict(x=0.0, y=-0.4)
-                fig.update_layout(margin=dict(t=150))
                 fig.write_image(export_name+".jpeg")
                 f.write(fig.to_html())
                 
@@ -335,6 +338,9 @@ def bar_chart(datasets_names, traces, labels, color, line_color, chart_title, x_
             
             fig.update_xaxes(title_text=x_title)
             fig.update_yaxes(title_text=y_title)
+            fig.update_layout(font=dict(size=36))
+            fig.update_layout(annotations=[dict(font=dict(size=36))])
+            fig.update_layout(margin=dict(t=150))
             fig.update_layout(height=height, width=width, title_text=datasets_names[0], template = 'plotly_white')
             fig.update_layout(showlegend = False)#, legend=dict(x=0.0, y=-0.4)
             fig.write_image(export_name+".jpeg")
@@ -364,6 +370,9 @@ def bar_chart(datasets_names, traces, labels, color, line_color, chart_title, x_
                 
                 fig.update_xaxes(title_text=x_title)
                 fig.update_yaxes(title_text=y_title)
+                fig.update_layout(font=dict(size=36))
+                fig.update_layout(annotations=[dict(font=dict(size=36))])
+                fig.update_layout(margin=dict(t=150))
                 fig.update_layout(height=height, width=width, title_text=chart_title, template = 'plotly_white')
                 fig.update_layout(showlegend = False)#, legend=dict(x=0.0, y=-0.4)
                 fig.write_image(export_name+".jpeg")
@@ -393,6 +402,9 @@ def stacked_bar_chart(datasets_names, x, y, names, colors, chart_title, x_title,
             
             fig.update_xaxes(title_text=x_title)
             fig.update_yaxes(title_text=y_title)
+            fig.update_layout(font=dict(size=36))
+            fig.update_layout(annotations=[dict(font=dict(size=36))])
+            fig.update_layout(margin=dict(t=150))
             fig.update_layout(height=height, width=width, title_text=datasets_names[0], template = 'plotly_white')
             fig.write_image(export_name+".jpeg")
             f.write(fig.to_html())
@@ -420,7 +432,10 @@ def stacked_bar_chart(datasets_names, x, y, names, colors, chart_title, x_title,
                
                 fig.update_xaxes(title_text=x_title)
                 fig.update_yaxes(title_text=y_title)
-                fig.update_layout(barmode = 'stack')           
+                fig.update_layout(barmode = 'stack')
+                fig.update_layout(font=dict(size=36))
+                fig.update_layout(annotations=[dict(font=dict(size=36))])
+                fig.update_layout(margin=dict(t=150))
                 fig.update_layout(height=height, width=width, title_text=chart_title, template = 'plotly_white')
                 fig.write_image(export_name+".jpeg")
                 f.write(fig.to_html())
@@ -462,6 +477,9 @@ def scatter_chart_und(datasets_names, traces, y, labels, labels_group, colors, c
                         
                 fig.update_xaxes(title_text=x_title)
                 fig.update_yaxes(title_text=y_title)
+                fig.update_layout(font=dict(size=36))
+                fig.update_layout(annotations=[dict(font=dict(size=36))])
+                fig.update_layout(margin=dict(t=150))
                 fig.update_layout(height=height, width=width, title_text=chart_title, template = 'plotly_white')
                 fig.update_layout(legend_orientation=legend_orientation)#, legend=dict(x=0.0, y=-0.4)
                 fig.write_image(export_name+".jpeg")
@@ -487,6 +505,9 @@ def scatter_chart(datasets_names, traces, x, y, labels, labels_group, colors, ch
             
             fig.update_xaxes(title_text=x_title)
             fig.update_yaxes(title_text=y_title)
+            fig.update_layout(font=dict(size=36))
+            fig.update_layout(annotations=[dict(font=dict(size=36))])
+            fig.update_layout(margin=dict(t=150))
             fig.update_layout(height=height, width=width, title_text=datasets_names[0], template = 'plotly_white')
             fig.update_layout(legend_orientation=legend_orientation)#, legend=dict(x=0.0, y=-0.4)
             fig.write_image(export_name+".jpeg")
@@ -520,6 +541,9 @@ def scatter_chart(datasets_names, traces, x, y, labels, labels_group, colors, ch
                         
                 fig.update_xaxes(title_text=x_title)
                 fig.update_yaxes(title_text=y_title)
+                fig.update_layout(font=dict(size=36))
+                fig.update_layout(annotations=[dict(font=dict(size=36))])
+                fig.update_layout(margin=dict(t=150))
                 fig.update_layout(height=height, width=width, title_text=chart_title, template = 'plotly_white')
                 fig.update_layout(legend_orientation=legend_orientation)#, legend=dict(x=0.0, y=-0.4)
                 fig.write_image(export_name+".jpeg")
@@ -542,6 +566,9 @@ def boxplot_chart(datasets_names, traces, labels, colors, chart_title, x_title, 
                           row=1, col=1)
 
             fig.update_layout(height=height, width=width, title_text=datasets_names[0], template = 'plotly_white')
+            fig.update_layout(font=dict(size=36))
+            fig.update_layout(annotations=[dict(font=dict(size=36))])
+            fig.update_layout(margin=dict(t=150))
             fig.write_image(export_name+".jpeg")
             f.write(fig.to_html())
     
@@ -565,6 +592,9 @@ def boxplot_chart(datasets_names, traces, labels, colors, chart_title, x_title, 
                               row=1, col=(i+1))
 
                 fig.update_layout(height=height, width=width, title_text=chart_title, showlegend = False, template = 'plotly_white')
+                fig.update_layout(font=dict(size=36))
+                fig.update_layout(annotations=[dict(font=dict(size=36))])
+                fig.update_layout(margin=dict(t=150))
                 fig.write_image(export_name+".jpeg")
                 f.write(fig.to_html())
                     
@@ -582,10 +612,14 @@ def heatmap_chart(datasets_names, datasets, x_labels, y_labels, colorscale, char
                                      y=y_labels,
                                      z=datasets, 
                                      texttemplate= "%{z}",
+                                     textfont={"size": 24},
                                      coloraxis="coloraxis"), 
                           row=1, col=1)
 
             fig.update_layout(coloraxis=dict(colorscale=colorscale))
+            fig.update_layout(font=dict(size=36))
+            fig.update_layout(annotations=[dict(font=dict(size=36))])
+            fig.update_layout(margin=dict(t=150))
             fig.update_layout(height=height, width=width, title_text=datasets_names[0], template = 'plotly_white')
             fig.write_image(export_name+".jpeg")
             f.write(fig.to_html())
@@ -601,10 +635,14 @@ def heatmap_chart(datasets_names, datasets, x_labels, y_labels, colorscale, char
                                              y=y_labels[i],
                                              z=datasets[i], 
                                              texttemplate= "%{z}",
+                                             textfont={"size": 24},
                                              coloraxis="coloraxis"), 
                                   row=1, col=i+1)
 
                 fig.update_layout(coloraxis=dict(colorscale=colorscale))
+                fig.update_layout(font=dict(size=36))
+                fig.update_layout(annotations=[dict(font=dict(size=36))])
+                fig.update_layout(margin=dict(t=150))
                 fig.update_layout(height=height, width=width, title_text=chart_title, template = 'plotly_white')
                 fig.write_image(export_name+".jpeg")
                 f.write(fig.to_html())
@@ -621,10 +659,14 @@ def heatmap_chart(datasets_names, datasets, x_labels, y_labels, colorscale, char
                                          y=y_labels[i],
                                          z=datasets[i], 
                                          texttemplate= "%{z}",
+                                         textfont={"size": 24},
                                          coloraxis="coloraxis"), 
                               row=i+1, col=1)
 
             fig.update_layout(coloraxis=dict(colorscale=colorscale))
+            fig.update_layout(font=dict(size=36))
+            fig.update_layout(annotations=[dict(font=dict(size=36))])
+            fig.update_layout(margin=dict(t=150))
             fig.update_layout(height=height, width=width, title_text=chart_title, template = 'plotly_white')
             fig.write_image(export_name+".jpeg")
             f.write(fig.to_html())
@@ -664,6 +706,9 @@ def stackedbars_chart(datasets_names, traces, bands, n_bins, labels, labels_grou
   
                 fig.update_xaxes(title_text=x_title)
                 fig.update_yaxes(title_text=y_title)
+                fig.update_layout(font=dict(size=36))
+                fig.update_layout(annotations=[dict(font=dict(size=36))])
+                fig.update_layout(margin=dict(t=150))
                 fig.update_layout(height=height, width=width, title_text=chart_title, template = 'plotly_white')    
                 fig.write_image(export_name+".jpeg")
                 f.write(fig.to_html())
