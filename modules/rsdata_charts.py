@@ -723,6 +723,7 @@ def map_nn(date, ground_truth, classified_data, path, caminho, height, width): #
     #English
     mapa = []
     color = []
+    
     data = ground_truth.query("Simple_Path == '"+date+"'")
     
     for i in range(len(set(list(data['Line']))) - 1):
@@ -820,7 +821,7 @@ def map_nn(date, ground_truth, classified_data, path, caminho, height, width): #
         color_line = []
         data_line = data.loc[data['Line'] == i]
         for j in range(len(set(list(data['Column']))) - 1):
-            cell = data_line.loc[data_line['Column'] == j]['Predicted_class'].values
+            cell = data_line.loc[data_line['Column'] == j]['Prediction'].values
             if len(cell) > 0:
                 map_line.append(cell[0])
                 #if cell[0] == 'Sand' or cell[0] == 'Coast':
@@ -863,7 +864,7 @@ def map_nn(date, ground_truth, classified_data, path, caminho, height, width): #
         color_line = []
         data_line = data.loc[data['Line'] == i]
         for j in range(len(set(list(data['Column']))) - 1):
-            cell = data_line.loc[data_line['Column'] == j]['Predicted_class'].values
+            cell = data_line.loc[data_line['Column'] == j]['Prediction'].values
             if len(cell) > 0:
                 map_line.append(cell[0])
                 #if cell[0] == 'Areia' or cell[0] == 'Costa':

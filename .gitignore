@@ -1,6 +1,9 @@
 files/
+charts/
+.ipynb_checkpoints/
+automl/checkpoints/
+automl/__pycache__/
 *.jpeg
+*.jpg
 *.html
 *.pyc
-.ipynb_checkpoints/main-checkpoint.ipynb
-.ipynb_checkpoints/main-checkpoint.ipynb

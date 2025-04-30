@@ -10,6 +10,8 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, balanced_accuracy_score, confusion_matrix, f1_score, fbeta_score, jaccard_score, log_loss, precision_score, recall_score, roc_auc_score #ver se precisa tudo isso
 from sklearn.model_selection import train_test_split
 from sklearn.neural_network import MLPClassifier
+from sklearn.preprocessing import LabelEncoder
+from xgboost import XGBClassifier
 
 __name__ = "rsdata_classification"
 
@@ -300,6 +302,64 @@ def random_forest(X, y, X_real, y_real, feature_names, n_epochs):
         hits = X_real.loc[assessment[i].query('Status == True').index]
         
     return classified_data, assessment, errors, hits, confusion_matrices, acc, b_acc, f1_macro, f1_weighted, fbeta_macro, fbeta_weighted, pr_macro, rc_macro, pr_weighted, rc_weighted, feature_importances
+
+
+def xgboost(X, y, X_real, y_real, feature_names, n_epochs):     
+    classified_data = dict()
+    assessment = dict()
+    confusion_matrices = dict()
+    acc = dict()
+    b_acc = dict()
+    f1_macro = dict()
+    f1_weighted = dict()
+    fbeta_macro = dict() 
+    fbeta_weighted = dict()
+    pr_macro = dict()
+    rc_macro = dict()
+    pr_weighted = dict()
+    rc_weighted = dict()
+    feature_importances = dict()
+    
+    for i in range(0, n_epochs):
+        # holdout
+        
+        label_encoder = LabelEncoder()
+        y = label_encoder.fit_transform(y)  # Converte ['Plastic', 'Sand', 'Water'] → [0, 1, 2]
+        y_real = label_encoder.fit_transform(y_real)  # Converte ['Plastic', 'Sand', 'Water'] → [0, 1, 2]
+        
+        #X_train, X_test, y_train, y_test = train_test_split(X, y, stratify=y, test_size=0.25, random_state=i)
+        
+              
+        xgboost = XGBClassifier(learning_rate=0.001, max_depth=9, min_child_weight=7, n_estimators=100, 
+                           n_jobs=1, subsample=0.45, verbosity=0, random_state=i).fit(X[feature_names], y)#treina com 100% do dart
+        
+        y_pred = xgboost.predict(X_real[feature_names])#testa com usgs
+
+        error_analysis = pd.DataFrame(index=X_real.index)
+        error_analysis['Real'] = y_real
+        error_analysis['Prediction'] = y_pred
+        error_analysis['Status'] = (error_analysis['Prediction'] == error_analysis['Real'])
+
+        
+        classified_data.update({i: y_pred})
+        assessment.update({i: error_analysis})
+        confusion_matrices.update({i:confusion_matrix(y_real, y_pred, labels=[1, 2])})
+        acc.update({i:accuracy_score(y_real, y_pred)}) 
+        b_acc.update({i:balanced_accuracy_score(y_real, y_pred)}) 
+        f1_macro.update({i:f1_score(y_real, y_pred, average='macro')}) #F1micro é igual a acurácia geral
+        f1_weighted.update({i:f1_score(y_real, y_pred, average='weighted')})
+        fbeta_macro.update({i:fbeta_score(y_real, y_pred, average='macro', beta=0.5)})
+        fbeta_weighted.update({i:fbeta_score(y_real, y_pred, average='weighted', beta=0.5)})
+        pr_macro.update({i:precision_score(y_real, y_pred, average='macro')}) 
+        pr_weighted.update({i:precision_score(y_real, y_pred, average='weighted')}) 
+        rc_macro.update({i:recall_score(y_real, y_pred, average='macro')})
+        rc_weighted.update({i:recall_score(y_real, y_pred, average='weighted')})
+        feature_importances.update({i:pd.Series(data=xgboost.feature_importances_, index=feature_names)})
+        
+        errors = X_real.loc[assessment[i].query('Status == False').index]
+        hits = X_real.loc[assessment[i].query('Status == True').index]
+        
+    return assessment, errors, hits, confusion_matrices, acc, b_acc, f1_macro, f1_weighted, fbeta_macro, fbeta_weighted, pr_macro, rc_macro, pr_weighted, rc_weighted, feature_importances
     
 
 def stats_classification(assessment, ground_truth):   
